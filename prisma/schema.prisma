@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  name      String?
+  avatarUrl String?
+  role      Role     @default(SUBSCRIBER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  personas      Persona[]
+  subscriptions Subscription[]
+  conversations Conversation[]
+  projects      Project[]      @relation("ClientProjects")
+}
+
+enum Role {
+  CREATOR
+  SUBSCRIBER
+  ADMIN
+}
+
+model Persona {
+  id                String      @id @default(cuid())
+  creatorId         String
+  creator           User        @relation(fields: [creatorId], references: [id])
+  name              String
+  slug              String      @unique
+  bio               String?
+  avatarUrl         String?
+  coverUrl          String?
+  type              PersonaType @default(HUMAN)
+  specialty         String?
+  tagline           String?
+  systemPrompt      String?
+  isPublished       Boolean     @default(false)
+  subscriptionPrice Int         @default(0)
+  currency          String      @default("usd")
+  stripePriceId     String?
+  stripeProductId   String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  posts         Post[]
+  subscriptions Subscription[]
+  conversations Conversation[]
+  projects      Project[]
+}
+
+enum PersonaType {
+  HUMAN
+  AI
+}
+
+model Post {
+  id         String     @id @default(cuid())
+  personaId  String
+  persona    Persona    @relation(fields: [personaId], references: [id])
+  content    String
+  mediaUrls  String[]
+  visibility Visibility @default(PUBLIC)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+enum Visibility {
+  PUBLIC
+  SUBSCRIBERS_ONLY
+}
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  subscriberId         String
+  subscriber           User               @relation(fields: [subscriberId], references: [id])
+  personaId            String
+  persona              Persona            @relation(fields: [personaId], references: [id])
+  stripeSubscriptionId String             @unique
+  stripeCustomerId     String
+  status               SubscriptionStatus @default(ACTIVE)
+  currentPeriodEnd     DateTime
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  INCOMPLETE
+}
+
+model Project {
+  id                    String        @id @default(cuid())
+  personaId             String
+  persona               Persona       @relation(fields: [personaId], references: [id])
+  clientId              String?
+  client                User?         @relation("ClientProjects", fields: [clientId], references: [id])
+  title                 String
+  description           String
+  price                 Int
+  status                ProjectStatus @default(OPEN)
+  stripePaymentIntentId String?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+}
+
+enum ProjectStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+}
+
+model Conversation {
+  id           String   @id @default(cuid())
+  personaId    String
+  persona      Persona  @relation(fields: [personaId], references: [id])
+  subscriberId String
+  subscriber   User     @relation(fields: [subscriberId], references: [id])
+  createdAt    DateTime @default(now())
+
+  messages Message[]
+
+  @@unique([personaId, subscriberId])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  role           MessageRole
+  content        String
+  createdAt      DateTime     @default(now())
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}

@@ -1,0 +1,116 @@
+import { auth } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { createStripeProduct, createStripePrice } from '@/lib/stripe'
+import { generateSlug } from '@/lib/utils'
+
+export async function POST(req: Request) {
+  const { userId } = await auth()
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const user = await prisma.user.findUnique({ where: { clerkId: userId } })
+  if (!user) {
+    return NextResponse.json({ error: 'User not found' }, { status: 404 })
+  }
+
+  const body = await req.json()
+  const {
+    name,
+    bio,
+    specialty,
+    tagline,
+    type,
+    systemPrompt,
+    subscriptionPrice,
+    avatarUrl,
+    coverUrl,
+    isPublished,
+  }: {
+    name: string
+    bio?: string
+    specialty?: string
+    tagline?: string
+    type?: string
+    systemPrompt?: string
+    subscriptionPrice?: number
+    avatarUrl?: string
+    coverUrl?: string
+    isPublished?: boolean
+  } = body
+
+  if (!name) {
+    return NextResponse.json({ error: 'Missing name' }, { status: 400 })
+  }
+
+  // Derive a unique slug, appending an incrementing suffix if the base is taken
+  let slug = generateSlug(name)
+  let attempt = 0
+  while (true) {
+    const existing = await prisma.persona.findUnique({ where: { slug } })
+    if (!existing) break
+    attempt++
+    slug = `${generateSlug(name)}-${attempt}`
+  }
+
+  // Provision Stripe product + monthly price when a non-zero price is provided
+  let stripeProductId: string | undefined
+  let stripePriceId: string | undefined
+
+  const priceInCents = subscriptionPrice ?? 0
+  if (priceInCents > 0) {
+    const product = await createStripeProduct(name, bio ?? undefined)
+    stripeProductId = product.id
+    const price = await createStripePrice(product.id, priceInCents)
+    stripePriceId = price.id
+  }
+
+  const personaType = type === 'AI' ? ('AI' as const) : ('HUMAN' as const)
+
+  const persona = await prisma.persona.create({
+    data: {
+      creatorId: user.id,
+      name,
+      slug,
+      bio: bio ?? null,
+      specialty: specialty ?? null,
+      tagline: tagline ?? null,
+      type: personaType,
+      // Only store system prompts on AI personas
+      systemPrompt: personaType === 'AI' ? (systemPrompt ?? null) : null,
+      subscriptionPrice: priceInCents,
+      avatarUrl: avatarUrl ?? null,
+      coverUrl: coverUrl ?? null,
+      isPublished: isPublished ?? false,
+      stripeProductId,
+      stripePriceId,
+    },
+  })
+
+  // Promote user to CREATOR role the first time they create a persona
+  if (user.role !== 'CREATOR') {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { role: 'CREATOR' },
+    })
+  }
+
+  return NextResponse.json(persona, { status: 201 })
+}
+
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url)
+  // Default: return only published personas (pass ?published=false to override)
+  const published = searchParams.get('published') !== 'false'
+
+  const personas = await prisma.persona.findMany({
+    where: published ? { isPublished: true } : {},
+    include: {
+      creator: { select: { name: true, avatarUrl: true } },
+    },
+    orderBy: { createdAt: 'desc' },
+  })
+
+  return NextResponse.json(personas)
+}

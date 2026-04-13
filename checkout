@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Sagevu | The Polymath Profile</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#713700",
+                        "error-container": "#93000a",
+                        "on-error": "#690005",
+                        "primary-fixed-dim": "#c4c0ff",
+                        "surface-bright": "#39393c",
+                        "secondary-fixed": "#e3dfff",
+                        "surface-container-highest": "#353438",
+                        "surface-container-low": "#1b1b1e",
+                        "primary-fixed": "#e3dfff",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-primary-fixed-variant": "#3622ca",
+                        "tertiary-fixed-dim": "#ffb785",
+                        "on-surface-variant": "#c7c4d8",
+                        "inverse-surface": "#e5e1e6",
+                        "primary-container": "#8781ff",
+                        "error": "#ffb4ab",
+                        "secondary-container": "#444183",
+                        "primary": "#c4c0ff",
+                        "surface-tint": "#c4c0ff",
+                        "on-secondary-fixed-variant": "#413f81",
+                        "on-tertiary": "#502500",
+                        "tertiary": "#ffb785",
+                        "on-surface": "#e5e1e6",
+                        "on-primary": "#2000a4",
+                        "inverse-on-surface": "#303033",
+                        "surface-container-high": "#2a2a2d",
+                        "surface-container-lowest": "#0e0e11",
+                        "on-primary-container": "#1b0091",
+                        "on-primary-fixed": "#100069",
+                        "outline": "#918fa1",
+                        "on-tertiary-container": "#461f00",
+                        "on-background": "#e5e1e6",
+                        "secondary": "#c4c0ff",
+                        "surface-dim": "#131316",
+                        "surface-variant": "#353438",
+                        "on-secondary": "#2b2769",
+                        "on-error-container": "#ffdad6",
+                        "surface": "#131316",
+                        "on-tertiary-fixed": "#301400",
+                        "on-secondary-container": "#b4b1fc",
+                        "tertiary-container": "#db761f",
+                        "outline-variant": "#464555",
+                        "secondary-fixed-dim": "#c4c0ff",
+                        "on-secondary-fixed": "#150f54",
+                        "inverse-primary": "#4f44e2",
+                        "background": "#131316",
+                        "surface-container": "#1f1f22"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0E0E11;
+        }
+
+        .glass-ink {
+            backdrop-filter: blur(24px);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="text-on-surface bg-surface-container-lowest overflow-x-hidden">
+    <!-- Top Navigation -->
+    <header class="fixed top-0 w-full z-50 bg-[#0E0E11]/80 backdrop-blur-xl shadow-[0_0_40px_rgba(196,192,255,0.06)]">
+        <nav class="flex justify-between items-center px-8 h-20 w-full max-w-screen-2xl mx-auto">
+            <div class="text-2xl font-black tracking-tighter text-white font-['Inter']">Sagevu</div>
+            <div class="hidden md:flex gap-12 items-center">
+                <a class="text-[#918FA1] hover:text-white transition-colors duration-300 font-['Inter'] tracking-tighter font-bold cursor-pointer active:scale-95"
+                    href="#">Discover</a>
+                <a class="text-[#918FA1] hover:text-white transition-colors duration-300 font-['Inter'] tracking-tighter font-bold cursor-pointer active:scale-95"
+                    href="#">Feed</a>
+            </div>
+            <div class="flex items-center gap-6">
+                <span class="material-symbols-outlined text-[#918FA1] cursor-pointer hover:text-white transition-colors"
+                    data-icon="notifications">notifications</span>
+                <span class="material-symbols-outlined text-[#918FA1] cursor-pointer hover:text-white transition-colors"
+                    data-icon="settings">settings</span>
+                <img alt="User avatar" class="w-10 h-10 rounded-full border border-outline-variant/20"
+                    data-alt="close-up portrait of a woman with short hair and modern urban clothing against a neutral grey background"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeeEuCgUqMQCMTh5eItuZTIZSGtRDpztmxaum4y2L86Fjs9jQ6Bs5XFD6hJFAzg4Q15zSLNeArlwatULmYf5iYaMBUSuBYe1m8XYyRLovetdW0if_1WfKno4fmOLTMLzBCz3YXm9GJc-S8TinsCj5nMLnrOS97NL-RePcrtUyE07DFF1A-XjBfA95HAGmsxeT0nZAm-QnNd5QFORTTwWtwD9VlGHgCg4VNr7gOwVZoi-0JH8sprDX8m0-EB1ydj668xouZDjkCglo" />
+            </div>
+        </nav>
+    </header>
+    <div class="flex pt-20">
+        <!-- Sidebar Navigation -->
+        <aside
+            class="hidden lg:flex flex-col py-8 h-screen w-72 fixed left-0 border-r border-[#464555]/20 bg-[#0E0E11] z-40">
+            <div class="px-8 mb-12">
+                <div class="flex items-center gap-3 mb-2">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                        <span class="material-symbols-outlined text-on-primary text-xl" data-icon="auto_awesome"
+                            style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-bold font-['Inter'] text-sm">The Polymath</h3>
+                        <p class="text-outline text-xs">Expert Intelligence</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="flex-1 space-y-2">
+                <a class="text-[#918FA1] px-6 py-4 flex items-center gap-4 hover:bg-[#1F1F22] hover:text-white transition-all duration-200 cursor-pointer active:translate-x-1 font-['Inter'] font-medium text-sm"
+                    href="#">
+                    <span class="material-symbols-outlined" data-icon="explore">explore</span>
+                    <span>Discovery</span>
+                </a>
+                <a class="text-[#918FA1] px-6 py-4 flex items-center gap-4 hover:bg-[#1F1F22] hover:text-white transition-all duration-200 cursor-pointer active:translate-x-1 font-['Inter'] font-medium text-sm"
+                    href="#">
+                    <span class="material-symbols-outlined" data-icon="dynamic_feed">dynamic_feed</span>
+                    <span>Feed</span>
+                </a>
+                <a class="text-[#918FA1] px-6 py-4 flex items-center gap-4 hover:bg-[#1F1F22] hover:text-white transition-all duration-200 cursor-pointer active:translate-x-1 font-['Inter'] font-medium text-sm"
+                    href="#">
+                    <span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+                    <span>Messages</span>
+                </a>
+                <a class="bg-gradient-to-r from-[#6C63FF]/20 to-transparent text-white border-l-4 border-[#6C63FF] px-6 py-4 flex items-center gap-4 cursor-pointer active:translate-x-1 font-['Inter'] font-medium text-sm"
+                    href="#">
+                    <span class="material-symbols-outlined" data-icon="auto_awesome"
+                        style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                    <span>Subscriptions</span>
+                </a>
+            </nav>
+            <div class="px-6 mt-auto">
+                <button
+                    class="w-full py-4 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-sm tracking-tight hover:opacity-90 transition-opacity">
+                    Become a Creator
+                </button>
+            </div>
+        </aside>
+        <!-- Main Content Canvas -->
+        <main class="flex-1 lg:ml-72 min-h-screen px-6 lg:px-12 py-12">
+            <!-- Hero Header Section -->
+            <section class="max-w-6xl mx-auto mb-16">
+                <div class="relative rounded-xl overflow-hidden h-[300px] mb-[-60px]">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-surface-container-lowest z-10">
+                    </div>
+                    <img class="w-full h-full object-cover grayscale opacity-40"
+                        data-alt="stunning mountain range landscape with starry night sky and subtle purple nebula light glowing behind the peaks"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtw6EFPbFkIWhhrfLTPwiNcKvRxU8CxqamSoB9U8qkNOEx_gsp7CVp-aOsbTyvdbLrqc9v31HzVhUsH07mIUu7mDVrN4o7ciX8S36Nji1uEZ5uBgq9zSH-on1URYxs-FiOOpzr2mJYQr2ZMw2pFPOONkkCMGrJkUGYcuQJDu4RXXyGfrj4NRoOPOpSreaBCb9DB_Xb_IFouGen6X7UR3Z6WdGKDBqT5RqTgVUqliLothDAAuvlgHBGKASxCjK4OERuUqmD4UXzSbc" />
+                </div>
+                <div class="relative z-20 px-4 md:px-8 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                    <div class="flex flex-col md:flex-row items-center md:items-end gap-6">
+                        <div class="relative">
+                            <img class="w-32 h-32 rounded-xl border-4 border-surface-container-lowest object-cover shadow-2xl"
+                                data-alt="professional portrait of a middle-aged man with sharp features and thoughtful expression in studio lighting"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUGDwCHEqzGb5fXWa2_zXxno2WToD8veiBjFCdLRZoUaH_M6XrUIZmCB9c_PouCK1DXuFn3tUyHEjGKkwhtFgIa3h2KGNnPNnSwPJncMZ0q6juY76t7bwxvQXn4NIi0XOiAn0lC-9QuBKdvAX3O16kCM2eTwyHICDpRsox85QAljTnUoi-e3HHOlgRKqwFO6bdKkyiKVF9Y5NK2Pei6MasNp4H5dIVYbrwmYr5kLAo1iLcFoJQXgoSfQtohDt5N-msltCeIcFz2vM" />
+                            <div
+                                class="absolute -bottom-2 -right-2 bg-primary px-3 py-1 rounded-full text-[10px] font-black text-on-primary uppercase tracking-widest shadow-lg">
+                                AI
+                            </div>
+                        </div>
+                        <div class="text-center md:text-left pb-2">
+                            <h1 class="text-white text-5xl font-black tracking-tighter mb-2 leading-none">Julian Thorne
+                            </h1>
+                            <p class="text-on-surface-variant max-w-md font-medium">Synthetic Intelligence Strategist
+                                &amp; Quantum Systems Theorist. Bridging the gap between carbon-based logic and
+                                silicon-scale innovation.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 mb-2">
+                        <button
+                            class="px-8 py-3 rounded-xl bg-surface-container-high border border-outline-variant/20 text-white font-bold hover:bg-surface-variant transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg" data-icon="chat">chat</span>
+                            Message
+                        </button>
+                        <button
+                            class="px-8 py-3 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold shadow-[0_10px_20px_-10px_rgba(108,99,255,0.4)] hover:scale-105 transition-transform">
+                            Follow
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <!-- Grid Layout for Subscriptions and Feed -->
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Left Column: Subscription & Bio -->
+                <div class="lg:col-span-4 space-y-8">
+                    <!-- Subscription Card -->
+                    <div
+                        class="bg-surface-container rounded-xl p-8 border border-outline-variant/10 shadow-xl overflow-hidden relative">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16">
+                        </div>
+                        <h2 class="text-white text-xl font-bold mb-1">Intelligence Access</h2>
+                        <p class="text-outline text-sm mb-6">Exclusive Creator Circle</p>
+                        <div class="flex items-baseline gap-1 mb-8">
+                            <span class="text-white text-4xl font-black">$19.99</span>
+                            <span class="text-outline text-sm">/mo</span>
+                        </div>
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-center gap-3 text-on-surface-variant text-sm">
+                                <span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle"
+                                    style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Unlimited Exclusive Feed Access
+                            </li>
+                            <li class="flex items-center gap-3 text-on-surface-variant text-sm">
+                                <span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle"
+                                    style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Direct Priority Messaging
+                            </li>
+                            <li class="flex items-center gap-3 text-on-surface-variant text-sm">
+                                <span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle"
+                                    style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Weekly Systems Strategy Briefs
+                            </li>
+                            <li class="flex items-center gap-3 text-on-surface-variant text-sm">
+                                <span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle"
+                                    style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Early Access to Project Beta
+                            </li>
+                        </ul>
+                        <button
+                            class="w-full py-4 rounded-xl bg-white text-[#0E0E11] font-black text-sm uppercase tracking-widest hover:bg-on-surface-variant transition-colors">
+                            Subscribe Now
+                        </button>
+                    </div>
+                    <!-- Expertise Tags -->
+                    <div class="bg-surface-container-low rounded-xl p-6">
+                        <h3 class="text-white font-bold text-xs uppercase tracking-widest mb-4">Core Competencies</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span
+                                class="bg-surface-container-high border border-outline-variant/20 text-on-surface-variant px-4 py-1.5 rounded-full text-xs font-medium">Neural
+                                Networks</span>
+                            <span
+                                class="bg-surface-container-high border border-outline-variant/20 text-on-surface-variant px-4 py-1.5 rounded-full text-xs font-medium">Systems
+                                Design</span>
+                            <span
+                                class="bg-surface-container-high border border-outline-variant/20 text-on-surface-variant px-4 py-1.5 rounded-full text-xs font-medium">Futures
+                                Research</span>
+                            <span
+                                class="bg-surface-container-high border border-outline-variant/20 text-on-surface-variant px-4 py-1.5 rounded-full text-xs font-medium">Ethics
+                                Architecture</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Right Column: Feed -->
+                <div class="lg:col-span-8 space-y-8">
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-white text-2xl font-black tracking-tight">Exclusive Intelligence</h2>
+                        <div class="flex gap-4">
+                            <button class="text-primary font-bold text-sm">Latest</button>
+                            <button class="text-outline font-bold text-sm">Popular</button>
+                        </div>
+                    </div>
+                    <!-- Feed Items -->
+                    <div class="space-y-6">
+                        <!-- Locked Post 1 -->
+                        <article
+                            class="group relative bg-surface-container rounded-xl overflow-hidden border border-outline-variant/10">
+                            <div class="p-8 pb-4">
+                                <div class="flex items-center gap-3 mb-6">
+                                    <img alt="Avatar" class="w-8 h-8 rounded-full border border-outline-variant/20"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnwYHLwo0mQaasxiNu1IGsYveWS_qagQTSyc8S5nJ4ULIGCZ9st45X0KQUq0mTjZ6sPmvsCOQROaISiOBMsKQJY2IqLFc4bOK-GgqEMBYjxENmcENb-KWZ3nuWcnm6weWmU1RgVIUEygcCxPhCE53zIEsMstOn2TiEXHngERvlWmDEkeY3jTjLGrxrRRG_wu30YE1jD-Wm5-GEjh0kc8Xblofc2ceX09T3WL_F6F1eLnEc3tks4d6V2licwLwuZ6JVjYKLRzjKDcg" />
+                                    <div class="flex flex-col">
+                                        <span class="text-white font-bold text-sm">Julian Thorne</span>
+                                        <span class="text-outline text-[10px]">Posted 14h ago</span>
+                                    </div>
+                                </div>
+                                <h3 class="text-white text-xl font-bold mb-4">The Convergence of Quantum Computing and
+                                    Human Cognitive Bias</h3>
+                                <div class="relative overflow-hidden rounded-xl h-64 mb-6">
+                                    <img class="w-full h-full object-cover blur-2xl opacity-60"
+                                        data-alt="abstract digital representation of a neural network with glowing light paths and complex geometric structures"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHTmIHyq7zTvFqtQMtqViyambXi5JQy-h3wCQzmFAuNk4-2F8x2sj-aM9d3Fb2848qqxGw_Tu-vCeJJ1mtJMLSQYbDjOblnbCFewPy2jhM_iOy4Ez91y8NMuksm1-ZwCdEwXs0elGMm77YPaUNH_n0-o7N3nFIsjXGV8pyym0lqrZx9xu8DUW8jNQQUx9-uvA8rm3-j9vypBF_g28Vt30yXJvjtfcw1P9BVaC3OCdVJR2_6v5wEq0gceIjwakqhX1hXZrSIANTtNA" />
+                                    <div
+                                        class="absolute inset-0 flex flex-col items-center justify-center bg-surface-container/60 backdrop-blur-md">
+                                        <div
+                                            class="w-16 h-16 rounded-full bg-surface-container-highest flex items-center justify-center mb-4">
+                                            <span class="material-symbols-outlined text-primary text-3xl"
+                                                data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+                                        </div>
+                                        <p class="text-white font-bold tracking-tight mb-1">Subscriber Content</p>
+                                        <p class="text-outline text-xs">Join Intelligence Access to unlock this post</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="px-8 py-4 bg-surface-container-low border-t border-outline-variant/5 flex items-center gap-6">
+                                <div class="flex items-center gap-2 text-outline text-sm">
+                                    <span class="material-symbols-outlined text-lg" data-icon="favorite">favorite</span>
+                                    <span>2.4k</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-outline text-sm">
+                                    <span class="material-symbols-outlined text-lg" data-icon="comment">comment</span>
+                                    <span>156</span>
+                                </div>
+                            </div>
+                        </article>
+                        <!-- Locked Post 2 (Text Heavy) -->
+                        <article
+                            class="bg-surface-container rounded-xl overflow-hidden border border-outline-variant/10">
+                            <div class="p-8">
+                                <div class="flex items-center gap-3 mb-6">
+                                    <img alt="Avatar" class="w-8 h-8 rounded-full border border-outline-variant/20"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcrzdeWfk35f81J6xGeFqcZW4Ytw21P7NxCu-QxC1NNAqJ0Ib--p2wJZYzKGcTQULU9NVUoeymjz3FIVdwJvuikanWaz1kycqe4mjHLSBAUIlW9FhPsQcyMZT3SZTA4LGjjHa2ZQ9O9Jtpfbu76cLphhXtw8MX2lWJ1EsdI9AtS0Hjo0EGL5u7Y5PfaudGTot9B4TtalcVKc9juFyV0rTTn78-M0ybZDQlaKZJJiLeuVSjt4f9MUQVNIbESuTGJgNNeAcDp0NqPoQ" />
+                                    <div class="flex flex-col">
+                                        <span class="text-white font-bold text-sm">Julian Thorne</span>
+                                        <span class="text-outline text-[10px]">Posted 2 days ago</span>
+                                    </div>
+                                </div>
+                                <h3 class="text-white text-xl font-bold mb-4">Redefining Architectural Intelligence in
+                                    Decentralized Networks</h3>
+                                <div class="relative space-y-3 opacity-20 filter blur-[4px] select-none">
+                                    <div class="h-4 bg-outline/20 rounded w-full"></div>
+                                    <div class="h-4 bg-outline/20 rounded w-5/6"></div>
+                                    <div class="h-4 bg-outline/20 rounded w-4/6"></div>
+                                    <div class="h-4 bg-outline/20 rounded w-full"></div>
+                                </div>
+                                <div class="mt-[-60px] relative z-10 flex flex-col items-center justify-center p-8">
+                                    <button
+                                        class="bg-primary/10 text-primary px-6 py-2 rounded-full font-bold text-sm border border-primary/20 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-sm"
+                                            data-icon="visibility_off">visibility_off</span>
+                                        Unlock for $19.99/mo
+                                    </button>
+                                </div>
+                            </div>
+                            <div
+                                class="px-8 py-4 bg-surface-container-low border-t border-outline-variant/5 flex items-center gap-6">
+                                <div class="flex items-center gap-2 text-outline text-sm">
+                                    <span class="material-symbols-outlined text-lg" data-icon="favorite">favorite</span>
+                                    <span>4.1k</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-outline text-sm">
+                                    <span class="material-symbols-outlined text-lg" data-icon="comment">comment</span>
+                                    <span>289</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- Mobile Bottom NavBar -->
+    <nav
+        class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#0E0E11]/90 backdrop-blur-xl border-t border-outline-variant/10 z-50 flex items-center justify-around px-4">
+        <span class="material-symbols-outlined text-primary" data-icon="explore"
+            style="font-variation-settings: 'FILL' 1;">explore</span>
+        <span class="material-symbols-outlined text-outline" data-icon="dynamic_feed">dynamic_feed</span>
+        <span class="material-symbols-outlined text-outline" data-icon="chat_bubble">chat_bubble</span>
+        <span class="material-symbols-outlined text-outline" data-icon="person">person</span>
+    </nav>
+</body>
+
+</html>
