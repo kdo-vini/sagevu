@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
-
 :root {
-  --background: #131316;
+  --background: #0A0A0F;
   --foreground: #E5E1E6;
+  --primary: #C4C0FF;
+  --primary-glow: rgba(135, 129, 255, 0.15);
+  --accent: #8781FF;
 }
 
 * {
@@ -47,7 +47,7 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #1B1B1E;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: #464555;
@@ -102,6 +102,13 @@ body {
 
 /* Gradient text */
 .gradient-text {
+  background: linear-gradient(135deg, #C4C0FF 0%, #8781FF 50%, #FFB785 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-purple {
   background: linear-gradient(135deg, #C4C0FF 0%, #8781FF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -110,22 +117,116 @@ body {
 
 /* Typing indicator dots */
 @keyframes typing-dot {
-  0%,
-  100% {
-    opacity: 0.3;
-    transform: translateY(0);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(-4px);
-  }
+  0%, 100% { opacity: 0.3; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-4px); }
 }
 .typing-dot {
   animation: typing-dot 1.4s ease-in-out infinite;
 }
-.typing-dot:nth-child(2) {
-  animation-delay: 0.2s;
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ── Landing page specific ── */
+
+/* Floating grid background */
+.landing-grid {
+  background-image:
+    linear-gradient(rgba(135, 129, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(135, 129, 255, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
 }
-.typing-dot:nth-child(3) {
-  animation-delay: 0.4s;
+
+/* Glow orbs */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  will-change: transform;
+}
+.glow-orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(135, 129, 255, 0.15) 0%, transparent 70%);
+  top: -200px;
+  left: -200px;
+}
+.glow-orb-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 183, 133, 0.08) 0%, transparent 70%);
+  bottom: -100px;
+  right: -150px;
+}
+.glow-orb-3 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(135, 129, 255, 0.1) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Animated gradient border */
+@property --angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.gradient-border {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from var(--angle), transparent 40%, #8781FF 50%, transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: rotate-gradient 4s linear infinite;
+}
+
+@keyframes rotate-gradient {
+  to { --angle: 360deg; }
+}
+
+/* Feature card hover */
+.feature-card {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px -20px rgba(135, 129, 255, 0.2);
+  border-color: rgba(135, 129, 255, 0.3);
+}
+
+/* Marquee */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Noise overlay */
+.noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* Smooth reveal animation class */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
 }

@@ -21,7 +21,7 @@ export function Navbar() {
 
         <div className="hidden md:flex gap-12 items-center">
           <Link
-            href="/"
+            href="/discover"
             className="text-outline hover:text-white transition-colors duration-300 tracking-tighter font-bold"
           >
             Discover

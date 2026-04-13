@@ -10,7 +10,7 @@ interface MobileNavItem {
 }
 
 const navItems: MobileNavItem[] = [
-  { href: '/', icon: 'explore', label: 'Discover' },
+  { href: '/discover', icon: 'explore', label: 'Discover' },
   { href: '/feed', icon: 'dynamic_feed', label: 'Feed' },
   { href: '/messages', icon: 'chat_bubble', label: 'Messages' },
   { href: '/subscriptions', icon: 'auto_awesome', label: 'Subscriptions' },

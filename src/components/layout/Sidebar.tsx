@@ -10,7 +10,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { href: '/', label: 'Discover', icon: 'explore' },
+  { href: '/discover', label: 'Discover', icon: 'explore' },
   { href: '/feed', label: 'Feed', icon: 'dynamic_feed' },
   { href: '/messages', label: 'Messages', icon: 'chat_bubble' },
   { href: '/subscriptions', label: 'Subscriptions', icon: 'auto_awesome' },
@@ -26,7 +26,7 @@ export function Sidebar() {
     >
       <div className="px-8 mb-8">
         <Link
-          href="/"
+          href="/discover"
           className="text-2xl font-black tracking-tighter text-white hover:text-primary transition-colors duration-200"
           aria-label="Sagevu home"
         >
