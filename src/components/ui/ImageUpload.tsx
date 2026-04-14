@@ -43,35 +43,18 @@ export function ImageUpload({
       setError('')
 
       try {
-        // 1. Get signed upload URL from our API
-        const res = await fetch('/api/upload', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            filename: file.name,
-            contentType: file.type,
-            folder,
-          }),
-        })
+        const form = new FormData()
+        form.append('file', file)
+        form.append('folder', folder)
+
+        const res = await fetch('/api/upload', { method: 'POST', body: form })
 
         if (!res.ok) {
           const data = (await res.json()) as { error?: string }
           throw new Error(data.error ?? 'Upload failed')
         }
 
-        const { uploadUrl, publicUrl } = (await res.json()) as {
-          uploadUrl: string
-          publicUrl: string
-        }
-
-        // 2. PUT to R2 signed URL
-        await fetch(uploadUrl, {
-          method: 'PUT',
-          headers: { 'Content-Type': file.type },
-          body: file,
-        })
-
-        // 3. Report the public URL back
+        const { publicUrl } = (await res.json()) as { publicUrl: string }
         onChange(publicUrl)
       } catch (err) {
         console.error('Upload error:', err)

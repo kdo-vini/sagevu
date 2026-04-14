@@ -22,6 +22,8 @@ model User {
   projects      Project[]      @relation("ClientProjects")
   subscriptions Subscription[]
   notifications Notification[]
+  postLikes     PostLike[]
+  postComments  PostComment[]
 }
 
 model Specialist {
@@ -53,16 +55,42 @@ model Specialist {
 }
 
 model Post {
-  id         String     @id @default(cuid())
-  specialistId  String
-  content       String
-  mediaUrls     String[]
-  visibility    Visibility @default(PUBLIC)
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  specialist    Specialist @relation(fields: [specialistId], references: [id])
+  id           String        @id @default(cuid())
+  specialistId String
+  content      String
+  mediaUrls    String[]
+  visibility   Visibility    @default(PUBLIC)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  specialist   Specialist    @relation(fields: [specialistId], references: [id])
+  likes        PostLike[]
+  comments     PostComment[]
 
   @@index([specialistId, createdAt])
+}
+
+model PostLike {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+  @@index([postId])
+}
+
+model PostComment {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([postId, createdAt])
 }
 
 model Subscription {
