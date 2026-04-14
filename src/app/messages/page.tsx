@@ -20,16 +20,16 @@ export default async function MessagesPage() {
     redirect('/sign-in')
   }
 
-  // Fetch conversations where the user is either the subscriber OR the creator of the persona
+  // Fetch conversations where the user is either the subscriber OR the creator of the specialist
   const conversations = await prisma.conversation.findMany({
     where: {
       OR: [
         { subscriberId: user.id },
-        { persona: { creatorId: user.id } }
+        { specialist: { creatorId: user.id } }
       ]
     },
     include: {
-      persona: {
+      specialist: {
         select: {
           id: true,
           name: true,
@@ -90,26 +90,26 @@ export default async function MessagesPage() {
               </div>
               <h3 className="text-white font-bold mb-2">No messages yet</h3>
               <p className="text-outline text-sm max-w-sm mx-auto mb-6">
-                When you subscribe to a persona, your direct conversations will appear here.
+                When you subscribe to a specialist, your direct conversations will appear here.
               </p>
               <Link 
                 href="/discover"
                 className="inline-flex items-center justify-center px-6 py-2.5 bg-white text-surface-container-lowest font-bold rounded-lg hover:bg-white/90 transition-colors text-sm"
               >
-                Find Personas
+                Find Specialists
               </Link>
             </div>
           ) : (
             <div className="bg-surface-container border border-outline-variant/10 rounded-2xl overflow-hidden divide-y divide-outline-variant/10">
               {conversations.map((conv) => {
                 // Determine who the "other party" is in this conversation
-                const isUserTheCreator = conv.persona.creatorId === user.id
+                const isUserTheCreator = conv.specialist.creatorId === user.id
                 
                 // If I am the creator, the other party is the subscriber.
-                // If I am the subscriber, the other party is the persona.
-                const otherPartyName = isUserTheCreator ? (conv.subscriber.name || 'Subscriber') : conv.persona.name
-                const otherPartyAvatar = isUserTheCreator ? conv.subscriber.avatarUrl : conv.persona.avatarUrl
-                const linkHref = `/${conv.persona.slug}/chat` // Chat route is currently standard under the persona slug
+                // If I am the subscriber, the other party is the specialist.
+                const otherPartyName = isUserTheCreator ? (conv.subscriber.name || 'Subscriber') : conv.specialist.name
+                const otherPartyAvatar = isUserTheCreator ? conv.subscriber.avatarUrl : conv.specialist.avatarUrl
+                const linkHref = `/${conv.specialist.slug}/chat` // Chat route is currently standard under the specialist slug
                 
                 const lastMessage = conv.messages[0]
 
@@ -127,8 +127,8 @@ export default async function MessagesPage() {
                           <span className="text-sm font-bold text-primary">{otherPartyName[0]}</span>
                         </div>
                       )}
-                      {!isUserTheCreator && conv.persona.type === 'AI' && (
-                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-primary border-2 border-surface-container" title="AI Persona" />
+                      {!isUserTheCreator && conv.specialist.type === 'AI' && (
+                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-primary border-2 border-surface-container" title="AI Specialist" />
                       )}
                     </div>
 
@@ -147,7 +147,7 @@ export default async function MessagesPage() {
                       <div className="text-sm text-outline truncate flex items-center gap-2">
                         {isUserTheCreator && (
                           <span className="inline-block px-1.5 py-0.5 rounded-sm bg-surface-variant text-[9px] uppercase tracking-wider text-on-surface-variant">
-                            {conv.persona.name} (Your Persona)
+                            {conv.specialist.name} (Your Specialist)
                           </span>
                         )}
                         <span className="truncate">

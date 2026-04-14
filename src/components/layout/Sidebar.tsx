@@ -74,7 +74,7 @@ export function Sidebar() {
           Dashboard
         </Link>
         <Link
-          href="/dashboard/persona/new"
+          href="/dashboard/specialist/new"
           className="block w-full py-3 px-4 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-sm text-center hover:opacity-90 transition-opacity duration-200"
         >
           Become a Creator

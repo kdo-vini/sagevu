@@ -24,14 +24,14 @@ export async function createStripePrice(
 
 export async function createCheckoutSession({
   priceId,
-  personaId,
+  specialistId,
   subscriberId,
   successUrl,
   cancelUrl,
   customerEmail,
 }: {
   priceId: string
-  personaId: string
+  specialistId: string
   subscriberId: string
   successUrl: string
   cancelUrl: string
@@ -44,7 +44,7 @@ export async function createCheckoutSession({
     success_url: successUrl,
     cancel_url: cancelUrl,
     customer_email: customerEmail,
-    metadata: { personaId, subscriberId },
-    subscription_data: { metadata: { personaId, subscriberId } },
+    metadata: { specialistId, subscriberId },
+    subscription_data: { metadata: { specialistId, subscriberId } },
   })
 }

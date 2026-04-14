@@ -6,15 +6,15 @@ import { Button } from '@/components/ui/button'
 import { formatCurrency } from '@/lib/utils'
 
 interface SubscribeButtonProps {
-  personaId: string
-  personaSlug: string
+  specialistId: string
+  specialistSlug: string
   subscriptionPrice: number
   isSubscribed?: boolean
 }
 
 export function SubscribeButton({
-  personaId,
-  personaSlug,
+  specialistId,
+  specialistSlug,
   subscriptionPrice,
   isSubscribed,
 }: SubscribeButtonProps) {
@@ -24,7 +24,7 @@ export function SubscribeButton({
 
   async function handleSubscribe() {
     if (!isSignedIn) {
-      router.push(`/sign-in?redirect_url=/${personaSlug}`)
+      router.push(`/sign-in?redirect_url=/${specialistSlug}`)
       return
     }
 
@@ -33,7 +33,7 @@ export function SubscribeButton({
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ personaId }),
+        body: JSON.stringify({ specialistId }),
       })
       const data = (await res.json()) as { url?: string }
       if (data.url) {

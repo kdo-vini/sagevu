@@ -3,9 +3,9 @@ import { auth } from '@clerk/nextjs/server'
 import { Navbar } from '@/components/layout/Navbar'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { MobileNav } from '@/components/layout/MobileNav'
-import { PersonaProfile } from '@/components/persona/PersonaProfile'
+import { SpecialistProfile } from '@/components/specialist/SpecialistProfile'
 import { prisma } from '@/lib/prisma'
-import type { Persona, Post } from '@/types'
+import type { Specialist, Post } from '@/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,19 +16,19 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params
   try {
-    const persona = await prisma.persona.findUnique({ where: { slug } })
-    if (!persona) return { title: 'Not Found' }
+    const specialist = await prisma.specialist.findUnique({ where: { slug } })
+    if (!specialist) return { title: 'Not Found' }
     return {
-      title: `${persona.name} — Sagevu`,
+      title: `${specialist.name} — Sagevu`,
       description:
-        persona.tagline ?? persona.bio ?? `Follow ${persona.name} on Sagevu`,
+        specialist.tagline ?? specialist.bio ?? `Follow ${specialist.name} on Sagevu`,
     }
   } catch {
     return { title: 'Sagevu' }
   }
 }
 
-export default async function PersonaPage({ params }: PageProps) {
+export default async function SpecialistPage({ params }: PageProps) {
   const { slug } = await params
   
   // Prevent static file requests (e.g. favicon.ico, missing assets) from triggering auth()
@@ -37,9 +37,9 @@ export default async function PersonaPage({ params }: PageProps) {
   
   const { userId } = await auth()
 
-  let persona
+  let specialist
   try {
-    persona = await prisma.persona.findUnique({
+    specialist = await prisma.specialist.findUnique({
       where: { slug },
       include: {
         posts: { orderBy: { createdAt: 'desc' } },
@@ -49,7 +49,7 @@ export default async function PersonaPage({ params }: PageProps) {
     notFound()
   }
 
-  if (!persona || !persona.isPublished) notFound()
+  if (!specialist || !specialist.isPublished) notFound()
 
   let isSubscribed = false
   let currentUserId: string | undefined
@@ -59,14 +59,14 @@ export default async function PersonaPage({ params }: PageProps) {
     if (user) {
       currentUserId = user.id
 
-      // Owner always has access to their own persona
-      if (user.id === persona.creatorId) {
+      // Owner always has access to their own specialist
+      if (user.id === specialist.creatorId) {
         isSubscribed = true
       } else {
         const subscription = await prisma.subscription.findFirst({
           where: {
             subscriberId: user.id,
-            personaId: persona.id,
+            specialistId: specialist.id,
             status: 'ACTIVE',
             currentPeriodEnd: { gt: new Date() },
           },
@@ -76,28 +76,28 @@ export default async function PersonaPage({ params }: PageProps) {
     }
   }
 
-  const personaData: Persona = {
-    id: persona.id,
-    creatorId: persona.creatorId,
-    name: persona.name,
-    slug: persona.slug,
-    bio: persona.bio ?? null,
-    avatarUrl: persona.avatarUrl ?? null,
-    coverUrl: persona.coverUrl ?? null,
-    type: persona.type as 'HUMAN' | 'AI',
-    specialty: persona.specialty ?? null,
-    tagline: persona.tagline ?? null,
-    isPublished: persona.isPublished,
-    subscriptionPrice: persona.subscriptionPrice,
-    currency: persona.currency,
-    stripePriceId: persona.stripePriceId ?? null,
-    createdAt: persona.createdAt.toISOString(),
-    updatedAt: persona.updatedAt.toISOString(),
+  const specialistData: Specialist = {
+    id: specialist.id,
+    creatorId: specialist.creatorId,
+    name: specialist.name,
+    slug: specialist.slug,
+    bio: specialist.bio ?? null,
+    avatarUrl: specialist.avatarUrl ?? null,
+    coverUrl: specialist.coverUrl ?? null,
+    type: specialist.type as 'HUMAN' | 'AI',
+    specialty: specialist.specialty ?? null,
+    tagline: specialist.tagline ?? null,
+    isPublished: specialist.isPublished,
+    subscriptionPrice: specialist.subscriptionPrice,
+    currency: specialist.currency,
+    stripePriceId: specialist.stripePriceId ?? null,
+    createdAt: specialist.createdAt.toISOString(),
+    updatedAt: specialist.updatedAt.toISOString(),
   }
 
-  const posts: Post[] = persona.posts.map((p) => ({
+  const posts: Post[] = specialist.posts.map((p) => ({
     id: p.id,
-    personaId: p.personaId,
+    specialistId: p.specialistId,
     content: p.content,
     mediaUrls: p.mediaUrls,
     visibility: p.visibility as 'PUBLIC' | 'SUBSCRIBERS_ONLY',
@@ -111,8 +111,8 @@ export default async function PersonaPage({ params }: PageProps) {
       <div className="flex pt-20">
         <Sidebar />
         <main className="flex-1 lg:ml-72 min-h-screen px-6 lg:px-12 py-12 pb-20 lg:pb-12">
-          <PersonaProfile
-            persona={personaData}
+          <SpecialistProfile
+            specialist={specialistData}
             posts={posts}
             isSubscribed={isSubscribed}
             currentUserId={currentUserId}

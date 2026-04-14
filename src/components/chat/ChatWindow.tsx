@@ -4,16 +4,16 @@ import { useUser } from '@clerk/nextjs'
 import { ChatMessage } from './ChatMessage'
 import { ChatInput } from './ChatInput'
 import { createBrowserSupabaseClient } from '@/lib/supabase'
-import type { Message, Persona } from '@/types'
+import type { Message, Specialist } from '@/types'
 
 interface ChatWindowProps {
-  persona: Persona
+  specialist: Specialist
   conversationId: string | null
   initialMessages: Message[]
 }
 
 export function ChatWindow({
-  persona,
+  specialist,
   conversationId: initialConvId,
   initialMessages,
 }: ChatWindowProps) {
@@ -79,7 +79,7 @@ export function ChatWindow({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          personaId: persona.id,
+          specialistId: specialist.id,
           content,
           conversationId,
         }),
@@ -96,8 +96,8 @@ export function ChatWindow({
         setConversationId(newConvId)
       }
 
-      // Stream response for AI personas
-      if (persona.type === 'AI' && res.body) {
+      // Stream response for AI specialists
+      if (specialist.type === 'AI' && res.body) {
         const reader = res.body.getReader()
         const decoder = new TextDecoder()
         let accumulated = ''
@@ -123,39 +123,39 @@ export function ChatWindow({
     }
   }
 
-  const showTypingIndicator = isLoading && !streamingContent && persona.type === 'AI'
+  const showTypingIndicator = isLoading && !streamingContent && specialist.type === 'AI'
 
   return (
     <div className="flex flex-col h-full">
       {/* Chat header */}
       <header className="flex items-center gap-4 px-6 py-4 border-b border-outline-variant/20 bg-surface-container-low flex-shrink-0">
         <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-surface-container-high flex-shrink-0">
-          {persona.avatarUrl ? (
+          {specialist.avatarUrl ? (
             <img
-              src={persona.avatarUrl}
-              alt={persona.name}
+              src={specialist.avatarUrl}
+              alt={specialist.name}
               className="w-full h-full object-cover"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary-container/20">
               <span className="text-lg font-black text-primary" aria-hidden="true">
-                {persona.name[0]}
+                {specialist.name[0]}
               </span>
             </div>
           )}
-          {persona.type === 'AI' && (
+          {specialist.type === 'AI' && (
             <div
               className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-primary border-2 border-surface-container"
-              title="AI Persona"
+              title="AI Specialist"
               aria-hidden="true"
             />
           )}
         </div>
         <div>
-          <h2 className="text-white font-bold text-sm">{persona.name}</h2>
+          <h2 className="text-white font-bold text-sm">{specialist.name}</h2>
           <p className="text-outline text-xs">
-            {persona.type === 'AI'
-              ? 'AI Persona · Always available'
+            {specialist.type === 'AI'
+              ? 'AI Specialist · Always available'
               : 'Human Creator'}
           </p>
         </div>
@@ -182,9 +182,9 @@ export function ChatWindow({
             </div>
             <p className="text-white font-bold mb-1">Start a conversation</p>
             <p className="text-outline text-sm max-w-xs">
-              {persona.type === 'AI'
-                ? `Ask ${persona.name} anything about ${persona.specialty ?? 'their expertise'}.`
-                : `Send ${persona.name} a message. They'll respond personally.`}
+              {specialist.type === 'AI'
+                ? `Ask ${specialist.name} anything about ${specialist.specialty ?? 'their expertise'}.`
+                : `Send ${specialist.name} a message. They'll respond specialistlly.`}
             </p>
           </div>
         )}
@@ -194,8 +194,8 @@ export function ChatWindow({
           <ChatMessage
             key={message.id}
             message={message}
-            personaName={persona.name}
-            personaAvatarUrl={persona.avatarUrl}
+            specialistName={specialist.name}
+            specialistAvatarUrl={specialist.avatarUrl}
             userName={user?.fullName}
             userAvatarUrl={user?.imageUrl}
           />
@@ -211,8 +211,8 @@ export function ChatWindow({
               content: streamingContent,
               createdAt: new Date().toISOString(),
             }}
-            personaName={persona.name}
-            personaAvatarUrl={persona.avatarUrl}
+            specialistName={specialist.name}
+            specialistAvatarUrl={specialist.avatarUrl}
           />
         )}
 
@@ -223,16 +223,16 @@ export function ChatWindow({
               className="flex-shrink-0 w-9 h-9 rounded-full overflow-hidden border border-outline-variant/20 bg-surface-container-high"
               aria-hidden="true"
             >
-              {persona.avatarUrl ? (
+              {specialist.avatarUrl ? (
                 <img
-                  src={persona.avatarUrl}
+                  src={specialist.avatarUrl}
                   alt=""
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary-container/20">
                   <span className="text-xs font-bold text-primary">
-                    {persona.name[0]}
+                    {specialist.name[0]}
                   </span>
                 </div>
               )}
@@ -252,7 +252,7 @@ export function ChatWindow({
       <ChatInput
         onSend={handleSend}
         disabled={isLoading}
-        placeholder={`Message ${persona.name}...`}
+        placeholder={`Message ${specialist.name}...`}
       />
     </div>
   )

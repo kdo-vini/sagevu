@@ -6,21 +6,21 @@ import type { Post } from '@/types'
 interface PostCardProps {
   post: Post
   isLocked?: boolean
-  personaName?: string
-  personaAvatarUrl?: string | null
-  personaSlug?: string
+  specialistName?: string
+  specialistAvatarUrl?: string | null
+  specialistSlug?: string
 }
 
 export function PostCard({
   post,
   isLocked = false,
-  personaName,
-  personaAvatarUrl,
-  personaSlug,
+  specialistName,
+  specialistAvatarUrl,
+  specialistSlug,
 }: PostCardProps) {
-  const name = personaName ?? post.persona?.name ?? 'Unknown'
-  const avatar = personaAvatarUrl ?? post.persona?.avatarUrl
-  const slug = personaSlug ?? post.persona?.slug
+  const name = specialistName ?? post.specialist?.name ?? 'Unknown'
+  const avatar = specialistAvatarUrl ?? post.specialist?.avatarUrl
+  const slug = specialistSlug ?? post.specialist?.slug
 
   return (
     <article className="group relative bg-surface-container rounded-xl overflow-hidden border border-outline-variant/10 hover:border-outline-variant/30 transition-all duration-300">

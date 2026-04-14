@@ -1,21 +1,21 @@
 'use client'
 import { useState } from 'react'
-import { PersonaCard } from '@/components/persona/PersonaCard'
-import type { Persona } from '@/types'
+import { SpecialistCard } from '@/components/specialist/SpecialistCard'
+import type { Specialist } from '@/types'
 
 type FilterType = 'ALL' | 'AI' | 'HUMAN'
 
 interface DiscoverGridProps {
-  personas: Persona[]
+  specialists: Specialist[]
 }
 
-export function DiscoverGrid({ personas }: DiscoverGridProps) {
+export function DiscoverGrid({ specialists }: DiscoverGridProps) {
   const [filter, setFilter] = useState<FilterType>('ALL')
 
   const filtered =
     filter === 'ALL'
-      ? personas
-      : personas.filter((p) => p.type === filter)
+      ? specialists
+      : specialists.filter((p) => p.type === filter)
 
   const filters: { value: FilterType; label: string }[] = [
     { value: 'ALL', label: 'All' },
@@ -27,9 +27,9 @@ export function DiscoverGrid({ personas }: DiscoverGridProps) {
     <section className="max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-white text-2xl font-black tracking-tight">
-          Discover Personas
+          Discover Specialists
         </h2>
-        <div className="flex gap-3" role="tablist" aria-label="Filter personas">
+        <div className="flex gap-3" role="tablist" aria-label="Filter specialists">
           {filters.map((f) => (
             <button
               key={f.value}
@@ -56,29 +56,29 @@ export function DiscoverGrid({ personas }: DiscoverGridProps) {
             </span>
           </div>
           <h3 className="text-white font-bold text-xl mb-2">
-            {filter === 'ALL' ? 'No personas yet' : `No ${filter} personas yet`}
+            {filter === 'ALL' ? 'No specialists yet' : `No ${filter} specialists yet`}
           </h3>
           <p className="text-outline mb-6">
             {filter === 'ALL'
-              ? 'Be the first to create an expert persona on Sagevu.'
-              : `Try switching filters to discover other personas.`}
+              ? 'Be the first to create an expert specialist on Sagevu.'
+              : `Try switching filters to discover other specialists.`}
           </p>
           {filter === 'ALL' && (
             <a
-              href="/dashboard/persona/new"
+              href="/dashboard/specialist/new"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-sm hover:opacity-90 transition-opacity"
             >
               <span className="material-symbols-outlined text-base">
                 add
               </span>
-              Create a Persona
+              Create a Specialist
             </a>
           )}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filtered.map((persona) => (
-            <PersonaCard key={persona.id} persona={persona} />
+          {filtered.map((specialist) => (
+            <SpecialistCard key={specialist.id} specialist={specialist} />
           ))}
         </div>
       )}

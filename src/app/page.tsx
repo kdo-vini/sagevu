@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger)
 const FEATURES = [
   {
     icon: 'smart_toy',
-    title: 'AI Personas',
+    title: 'AI Specialists',
     desc: 'Chat with AI-powered experts trained on specialized knowledge. Available 24/7, always sharp.',
     gradient: 'from-[#8781FF] to-[#C4C0FF]',
   },
@@ -37,7 +37,7 @@ const FEATURES = [
 ]
 
 const HOW_IT_WORKS = [
-  { step: '01', title: 'Discover', desc: 'Browse AI and human expert personas across every field.' },
+  { step: '01', title: 'Discover', desc: 'Browse AI and human expert specialists across every field.' },
   { step: '02', title: 'Subscribe', desc: 'Pick your favorites. Monthly plans that fit your needs.' },
   { step: '03', title: 'Engage', desc: 'Chat, read exclusive content, and unlock expert intelligence.' },
 ]
@@ -221,7 +221,7 @@ export default function LandingPage() {
 
           {/* Subtitle */}
           <p className="hero-subtitle max-w-xl mx-auto text-base sm:text-lg text-white/40 leading-relaxed mb-10" style={{ opacity: 0 }}>
-            Subscribe to AI & human expert personas. Unlock exclusive content,
+            Subscribe to AI & human expert specialists. Unlock exclusive content,
             direct chats, and intelligence — all in one platform.
           </p>
 
@@ -340,7 +340,7 @@ export default function LandingPage() {
       <section id="creators" ref={creatorsRef} className="relative py-20 overflow-hidden border-y border-white/[0.04]">
         <div className="text-center mb-12 px-6">
           <span className="inline-block text-xs font-bold tracking-widest uppercase text-[#7DD3FC] mb-3">
-            Personas
+            Specialists
           </span>
           <h2 className="text-4xl sm:text-5xl font-black tracking-tighter text-white">
             Meet the minds

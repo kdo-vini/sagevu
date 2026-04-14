@@ -18,15 +18,15 @@ export async function GET(
     return NextResponse.json({ error: 'User not found' }, { status: 404 })
   }
 
-  const persona = await prisma.persona.findUnique({ where: { id } })
-  if (!persona) {
-    return NextResponse.json({ error: 'Persona not found' }, { status: 404 })
+  const specialist = await prisma.specialist.findUnique({ where: { id } })
+  if (!specialist) {
+    return NextResponse.json({ error: 'Specialist not found' }, { status: 404 })
   }
-  if (persona.creatorId !== user.id) {
+  if (specialist.creatorId !== user.id) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  return NextResponse.json(persona)
+  return NextResponse.json(specialist)
 }
 
 export async function PATCH(
@@ -45,11 +45,11 @@ export async function PATCH(
     return NextResponse.json({ error: 'User not found' }, { status: 404 })
   }
 
-  const persona = await prisma.persona.findUnique({ where: { id } })
-  if (!persona) {
-    return NextResponse.json({ error: 'Persona not found' }, { status: 404 })
+  const specialist = await prisma.specialist.findUnique({ where: { id } })
+  if (!specialist) {
+    return NextResponse.json({ error: 'Specialist not found' }, { status: 404 })
   }
-  if (persona.creatorId !== user.id) {
+  if (specialist.creatorId !== user.id) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -64,22 +64,22 @@ export async function PATCH(
     isPublished: boolean
   }> = await req.json()
 
-  const updated = await prisma.persona.update({
+  const updated = await prisma.specialist.update({
     where: { id },
     data: {
-      name: body.name ?? persona.name,
-      bio: body.bio !== undefined ? body.bio : persona.bio,
+      name: body.name ?? specialist.name,
+      bio: body.bio !== undefined ? body.bio : specialist.bio,
       specialty:
-        body.specialty !== undefined ? body.specialty : persona.specialty,
-      tagline: body.tagline !== undefined ? body.tagline : persona.tagline,
+        body.specialty !== undefined ? body.specialty : specialist.specialty,
+      tagline: body.tagline !== undefined ? body.tagline : specialist.tagline,
       systemPrompt:
         body.systemPrompt !== undefined
           ? body.systemPrompt
-          : persona.systemPrompt,
+          : specialist.systemPrompt,
       avatarUrl:
-        body.avatarUrl !== undefined ? body.avatarUrl : persona.avatarUrl,
-      coverUrl: body.coverUrl !== undefined ? body.coverUrl : persona.coverUrl,
-      isPublished: body.isPublished ?? persona.isPublished,
+        body.avatarUrl !== undefined ? body.avatarUrl : specialist.avatarUrl,
+      coverUrl: body.coverUrl !== undefined ? body.coverUrl : specialist.coverUrl,
+      isPublished: body.isPublished ?? specialist.isPublished,
     },
   })
 

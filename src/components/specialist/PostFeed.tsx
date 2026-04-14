@@ -1,14 +1,14 @@
 'use client'
 import { PostCard } from './PostCard'
-import type { Post, Persona } from '@/types'
+import type { Post, Specialist } from '@/types'
 
 interface PostFeedProps {
   posts: Post[]
-  persona: Persona
+  specialist: Specialist
   isSubscribed: boolean
 }
 
-export function PostFeed({ posts, persona, isSubscribed }: PostFeedProps) {
+export function PostFeed({ posts, specialist, isSubscribed }: PostFeedProps) {
   if (posts.length === 0) {
     return (
       <div className="text-center py-16" role="status" aria-label="No posts">
@@ -26,7 +26,7 @@ export function PostFeed({ posts, persona, isSubscribed }: PostFeedProps) {
   }
 
   return (
-    <section aria-label={`${persona.name}'s posts`}>
+    <section aria-label={`${specialist.name}'s posts`}>
       <ol className="space-y-6 list-none">
         {posts.map((post) => {
           const isLocked = post.visibility === 'SUBSCRIBERS_ONLY' && !isSubscribed
@@ -35,9 +35,9 @@ export function PostFeed({ posts, persona, isSubscribed }: PostFeedProps) {
               <PostCard
                 post={post}
                 isLocked={isLocked}
-                personaName={persona.name}
-                personaAvatarUrl={persona.avatarUrl}
-                personaSlug={persona.slug}
+                specialistName={specialist.name}
+                specialistAvatarUrl={specialist.avatarUrl}
+                specialistSlug={specialist.slug}
               />
             </li>
           )

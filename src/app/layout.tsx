@@ -6,7 +6,7 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Sagevu — Expert Intelligence Platform',
   description:
-    'Subscribe to AI and human expert personas. Get exclusive content, direct messaging, and unparalleled access.',
+    'Subscribe to AI and human expert specialists. Get exclusive content, direct messaging, and unparalleled access.',
 }
 
 export default function RootLayout({

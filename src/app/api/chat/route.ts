@@ -11,15 +11,15 @@ export async function POST(req: Request) {
     }
 
     const {
-      personaId,
+      specialistId,
       content,
       conversationId,
-    }: { personaId: string; content: string; conversationId?: string } =
+    }: { specialistId: string; content: string; conversationId?: string } =
       await req.json()
 
-    if (!personaId || !content) {
+    if (!specialistId || !content) {
       return NextResponse.json(
-        { error: 'Missing personaId or content' },
+        { error: 'Missing specialistId or content' },
         { status: 400 }
       )
     }
@@ -30,11 +30,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    // Verify the caller has an active, non-expired subscription for this persona
+    // Verify the caller has an active, non-expired subscription for this specialist
     const subscription = await prisma.subscription.findFirst({
       where: {
         subscriberId: user.id,
-        personaId,
+        specialistId,
         status: 'ACTIVE',
         currentPeriodEnd: { gt: new Date() },
       },
@@ -46,13 +46,13 @@ export async function POST(req: Request) {
       )
     }
 
-    const persona = await prisma.persona.findUnique({ where: { id: personaId } })
-    if (!persona) {
-      return NextResponse.json({ error: 'Persona not found' }, { status: 404 })
+    const specialist = await prisma.specialist.findUnique({ where: { id: specialistId } })
+    if (!specialist) {
+      return NextResponse.json({ error: 'Specialist not found' }, { status: 404 })
     }
 
     // Get an existing conversation by explicit ID, or upsert the canonical
-    // one-per-(persona, subscriber) record
+    // one-per-(specialist, subscriber) record
     let conversation
     if (conversationId) {
       conversation = await prisma.conversation.findUnique({
@@ -62,9 +62,9 @@ export async function POST(req: Request) {
     if (!conversation) {
       conversation = await prisma.conversation.upsert({
         where: {
-          personaId_subscriberId: { personaId, subscriberId: user.id },
+          specialistId_subscriberId: { specialistId, subscriberId: user.id },
         },
-        create: { personaId, subscriberId: user.id },
+        create: { specialistId, subscriberId: user.id },
         update: {},
       })
     }
@@ -95,14 +95,14 @@ export async function POST(req: Request) {
       { role: 'user', content },
     ]
 
-    if (persona.type === 'AI') {
+    if (specialist.type === 'AI') {
       // Stream GPT-4o response back to the client as plain text chunks
       const stream = await openai.chat.completions.create({
         model: GPT_MODEL,
         max_tokens: 1024,
         messages: [
-          ...(persona.systemPrompt
-            ? [{ role: 'system' as const, content: persona.systemPrompt }]
+          ...(specialist.systemPrompt
+            ? [{ role: 'system' as const, content: specialist.systemPrompt }]
             : []),
           ...messages,
         ],
@@ -152,7 +152,7 @@ export async function POST(req: Request) {
         },
       })
     } else {
-      // HUMAN persona — message is stored; creator replies asynchronously
+      // HUMAN specialist — message is stored; creator replies asynchronously
       return NextResponse.json({
         success: true,
         conversationId: conversation.id,

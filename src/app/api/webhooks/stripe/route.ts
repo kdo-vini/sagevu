@@ -46,11 +46,11 @@ export async function POST(req: Request) {
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription
         const metadata = subscription.metadata as {
-          personaId?: string
+          specialistId?: string
           subscriberId?: string
         }
 
-        if (!metadata.personaId || !metadata.subscriberId) break
+        if (!metadata.specialistId || !metadata.subscriberId) break
 
         await prisma.subscription.upsert({
           where: { stripeSubscriptionId: subscription.id },
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
             stripeSubscriptionId: subscription.id,
             stripeCustomerId: subscription.customer as string,
             subscriberId: metadata.subscriberId,
-            personaId: metadata.personaId,
+            specialistId: metadata.specialistId,
             status: mapStripeStatus(subscription.status),
             currentPeriodEnd: new Date(
               (subscription.current_period_end as unknown as number) * 1000

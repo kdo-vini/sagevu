@@ -1,13 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { PersonaBadge } from './PersonaBadge'
+import { SpecialistBadge } from './SpecialistBadge'
 import { SubscribeButton } from './SubscribeButton'
 import { PostFeed } from './PostFeed'
 import { formatCurrency } from '@/lib/utils'
-import type { Persona, Post } from '@/types'
+import type { Specialist, Post } from '@/types'
 
-interface PersonaProfileProps {
-  persona: Persona
+interface SpecialistProfileProps {
+  specialist: Specialist
   posts: Post[]
   isSubscribed: boolean
   currentUserId?: string
@@ -19,17 +19,17 @@ const SUBSCRIPTION_BENEFITS = [
   'Full Chat Access',
 ] as const
 
-export function PersonaProfile({
-  persona,
+export function SpecialistProfile({
+  specialist,
   posts,
   isSubscribed,
   currentUserId,
-}: PersonaProfileProps) {
-  const isOwner = currentUserId === persona.creatorId
+}: SpecialistProfileProps) {
+  const isOwner = currentUserId === specialist.creatorId
 
   const benefits = [
     ...SUBSCRIPTION_BENEFITS,
-    persona.type === 'AI' ? 'AI-Powered Responses' : 'Personal Expert Guidance',
+    specialist.type === 'AI' ? 'AI-Powered Responses' : 'Specialistl Expert Guidance',
   ]
 
   return (
@@ -41,9 +41,9 @@ export function PersonaProfile({
             className="absolute inset-0 bg-gradient-to-b from-transparent to-surface-container-lowest z-10"
             aria-hidden="true"
           />
-          {persona.coverUrl ? (
+          {specialist.coverUrl ? (
             <Image
-              src={persona.coverUrl}
+              src={specialist.coverUrl}
               alt=""
               fill
               className="object-cover grayscale opacity-40"
@@ -64,10 +64,10 @@ export function PersonaProfile({
             {/* Avatar */}
             <div className="relative flex-shrink-0">
               <div className="w-32 h-32 rounded-xl border-4 border-surface-container-lowest bg-surface-container-high overflow-hidden shadow-2xl">
-                {persona.avatarUrl ? (
+                {specialist.avatarUrl ? (
                   <Image
-                    src={persona.avatarUrl}
-                    alt={persona.name}
+                    src={specialist.avatarUrl}
+                    alt={specialist.name}
                     fill
                     className="object-cover"
                     priority
@@ -75,24 +75,24 @@ export function PersonaProfile({
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary-container/30">
                     <span className="text-5xl font-black text-primary" aria-hidden="true">
-                      {persona.name[0]}
+                      {specialist.name[0]}
                     </span>
                   </div>
                 )}
               </div>
               <div className="absolute -bottom-2 -right-2">
-                <PersonaBadge type={persona.type} />
+                <SpecialistBadge type={specialist.type} />
               </div>
             </div>
 
             {/* Name & tagline */}
             <div className="text-center md:text-left pb-2">
               <h1 className="text-white text-5xl font-black tracking-tighter mb-2 leading-none">
-                {persona.name}
+                {specialist.name}
               </h1>
-              {persona.tagline && (
+              {specialist.tagline && (
                 <p className="text-on-surface-variant max-w-md font-medium">
-                  {persona.tagline}
+                  {specialist.tagline}
                 </p>
               )}
             </div>
@@ -102,7 +102,7 @@ export function PersonaProfile({
           <div className="flex gap-4 mb-2">
             {isSubscribed && (
               <Link
-                href={`/${persona.slug}/chat`}
+                href={`/${specialist.slug}/chat`}
                 className="px-8 py-3 rounded-xl bg-surface-container-high border border-outline-variant/20 text-white font-bold hover:bg-surface-variant transition-colors duration-200 flex items-center gap-2"
               >
                 <span className="material-symbols-outlined text-lg" aria-hidden="true">
@@ -114,16 +114,16 @@ export function PersonaProfile({
             {!isOwner && (
               <div className="min-w-[160px]">
                 <SubscribeButton
-                  personaId={persona.id}
-                  personaSlug={persona.slug}
-                  subscriptionPrice={persona.subscriptionPrice}
+                  specialistId={specialist.id}
+                  specialistSlug={specialist.slug}
+                  subscriptionPrice={specialist.subscriptionPrice}
                   isSubscribed={isSubscribed}
                 />
               </div>
             )}
             {isOwner && (
               <Link
-                href={`/dashboard/persona/${persona.id}/edit`}
+                href={`/dashboard/specialist/${specialist.id}/edit`}
                 className="px-8 py-3 rounded-xl bg-surface-container-high border border-outline-variant/20 text-white font-bold hover:bg-surface-variant transition-colors duration-200 flex items-center gap-2"
               >
                 <span className="material-symbols-outlined text-lg" aria-hidden="true">
@@ -141,7 +141,7 @@ export function PersonaProfile({
         {/* Left column */}
         <div className="lg:col-span-4 space-y-6">
           {/* Subscription card */}
-          {!isSubscribed && !isOwner && persona.subscriptionPrice > 0 && (
+          {!isSubscribed && !isOwner && specialist.subscriptionPrice > 0 && (
             <div className="bg-surface-container rounded-xl p-8 border border-outline-variant/10 shadow-xl overflow-hidden relative">
               <div
                 className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"
@@ -153,7 +153,7 @@ export function PersonaProfile({
               <p className="text-outline text-sm mb-6">Exclusive Creator Circle</p>
               <div className="flex items-baseline gap-1 mb-8">
                 <span className="text-white text-4xl font-black">
-                  {formatCurrency(persona.subscriptionPrice)}
+                  {formatCurrency(specialist.subscriptionPrice)}
                 </span>
                 <span className="text-outline text-sm">/mo</span>
               </div>
@@ -175,34 +175,34 @@ export function PersonaProfile({
                 ))}
               </ul>
               <SubscribeButton
-                personaId={persona.id}
-                personaSlug={persona.slug}
-                subscriptionPrice={persona.subscriptionPrice}
+                specialistId={specialist.id}
+                specialistSlug={specialist.slug}
+                subscriptionPrice={specialist.subscriptionPrice}
                 isSubscribed={isSubscribed}
               />
             </div>
           )}
 
           {/* Bio */}
-          {persona.bio && (
+          {specialist.bio && (
             <div className="bg-surface-container-low rounded-xl p-6">
               <h3 className="text-white font-bold text-xs uppercase tracking-widest mb-3">
                 About
               </h3>
               <p className="text-on-surface-variant text-sm leading-relaxed">
-                {persona.bio}
+                {specialist.bio}
               </p>
             </div>
           )}
 
           {/* Specialty */}
-          {persona.specialty && (
+          {specialist.specialty && (
             <div className="bg-surface-container-low rounded-xl p-6">
               <h3 className="text-white font-bold text-xs uppercase tracking-widest mb-3">
                 Specialty
               </h3>
               <span className="bg-surface-container-high border border-outline-variant/20 text-on-surface-variant px-4 py-1.5 rounded-full text-xs font-medium inline-block">
-                {persona.specialty}
+                {specialist.specialty}
               </span>
             </div>
           )}
@@ -212,12 +212,12 @@ export function PersonaProfile({
         <div className="lg:col-span-8 space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-white text-2xl font-black tracking-tight">
-              {persona.type === 'AI' ? 'AI Intelligence Feed' : 'Latest Posts'}
+              {specialist.type === 'AI' ? 'AI Intelligence Feed' : 'Latest Posts'}
             </h2>
           </div>
           <PostFeed
             posts={posts}
-            persona={persona}
+            specialist={specialist}
             isSubscribed={isSubscribed}
           />
         </div>

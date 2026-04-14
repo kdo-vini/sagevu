@@ -61,7 +61,7 @@ export async function POST(req: Request) {
   let slug = generateSlug(name)
   let attempt = 0
   while (true) {
-    const existing = await prisma.persona.findUnique({ where: { slug } })
+    const existing = await prisma.specialist.findUnique({ where: { slug } })
     if (!existing) break
     attempt++
     slug = `${generateSlug(name)}-${attempt}`
@@ -79,9 +79,9 @@ export async function POST(req: Request) {
     stripePriceId = price.id
   }
 
-  const personaType = type === 'AI' ? ('AI' as const) : ('HUMAN' as const)
+  const specialistType = type === 'AI' ? ('AI' as const) : ('HUMAN' as const)
 
-  const persona = await prisma.persona.create({
+  const specialist = await prisma.specialist.create({
     data: {
       creatorId: user.id,
       name,
@@ -89,9 +89,9 @@ export async function POST(req: Request) {
       bio: bio ?? null,
       specialty: specialty ?? null,
       tagline: tagline ?? null,
-      type: personaType,
-      // Only store system prompts on AI personas
-      systemPrompt: personaType === 'AI' ? (systemPrompt ?? null) : null,
+      type: specialistType,
+      // Only store system prompts on AI specialists
+      systemPrompt: specialistType === 'AI' ? (systemPrompt ?? null) : null,
       subscriptionPrice: priceInCents,
       avatarUrl: avatarUrl ?? null,
       coverUrl: coverUrl ?? null,
@@ -101,7 +101,7 @@ export async function POST(req: Request) {
     },
   })
 
-  // Promote user to CREATOR role the first time they create a persona
+  // Promote user to CREATOR role the first time they create a specialist
   if (user.role !== 'CREATOR') {
     await prisma.user.update({
       where: { id: user.id },
@@ -109,15 +109,15 @@ export async function POST(req: Request) {
     })
   }
 
-  return NextResponse.json(persona, { status: 201 })
+  return NextResponse.json(specialist, { status: 201 })
 }
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  // Default: return only published personas (pass ?published=false to override)
+  // Default: return only published specialists (pass ?published=false to override)
   const published = searchParams.get('published') !== 'false'
 
-  const personas = await prisma.persona.findMany({
+  const specialists = await prisma.specialist.findMany({
     where: published ? { isPublished: true } : {},
     include: {
       creator: { select: { name: true, avatarUrl: true } },
@@ -125,5 +125,5 @@ export async function GET(req: Request) {
     orderBy: { createdAt: 'desc' },
   })
 
-  return NextResponse.json(personas)
+  return NextResponse.json(specialists)
 }

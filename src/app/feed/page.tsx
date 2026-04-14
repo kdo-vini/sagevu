@@ -4,8 +4,8 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { MobileNav } from '@/components/layout/MobileNav'
 import { prisma } from '@/lib/prisma'
-import { PostFeed } from '@/components/persona/PostFeed'
-import type { Post, Persona } from '@/types'
+import { PostFeed } from '@/components/specialist/PostFeed'
+import type { Post, Specialist } from '@/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -29,22 +29,22 @@ export default async function FeedPage() {
       currentPeriodEnd: { gt: new Date() },
     },
     select: {
-      personaId: true,
+      specialistId: true,
     },
   })
 
-  const subscribedPersonaIds = subscriptions.map((s) => s.personaId)
+  const subscribedSpecialistIds = subscriptions.map((s) => s.specialistId)
 
-  // Fetch posts from subscribed personas OR public posts from any published persona
+  // Fetch posts from subscribed specialists OR public posts from any published specialist
   // Since it's an "Exclusive Feed", we prioritize subscribed content, but for discovery we can show public posts or just limit to what they follow.
-  // We will show: posts from subscribed personas + public posts (optional depending on UX, let's keep it strictly 'feed' of followed persons for now to make "Exclusive" real)
+  // We will show: posts from subscribed specialists + public posts (optional depending on UX, let's keep it strictly 'feed' of followed persons for now to make "Exclusive" real)
   const posts = await prisma.post.findMany({
     where: {
-      personaId: { in: subscribedPersonaIds },
-      persona: { isPublished: true },
+      specialistId: { in: subscribedSpecialistIds },
+      specialist: { isPublished: true },
     },
     include: {
-      persona: {
+      specialist: {
         select: {
           id: true,
           name: true,
@@ -60,10 +60,10 @@ export default async function FeedPage() {
     orderBy: { createdAt: 'desc' },
   })
 
-  // Group posts or pass directly? The PostFeed component expects an array of posts and a *single* persona prop currently.
+  // Group posts or pass directly? The PostFeed component expects an array of posts and a *single* specialist prop currently.
   // Wait, let's check `PostFeed` component.
-  // The existing `PostFeed` component is designed to render posts for a *single* persona profile.
-  // For the global feed, we'll need to map over posts and render `<PostCard>` directly, because each post could have a different Persona.
+  // The existing `PostFeed` component is designed to render posts for a *single* specialist profile.
+  // For the global feed, we'll need to map over posts and render `<PostCard>` directly, because each post could have a different Specialist.
 
   return (
     <div className="min-h-screen">
@@ -94,13 +94,13 @@ export default async function FeedPage() {
               </div>
               <h3 className="text-white font-bold mb-2">Your feed is quiet</h3>
               <p className="text-outline text-sm max-w-sm mx-auto mb-6">
-                Subscribe to human and AI personas to see their exclusive content and analysis appear here.
+                Subscribe to human and AI specialists to see their exclusive content and analysis appear here.
               </p>
               <a 
                 href="/discover"
                 className="inline-flex items-center justify-center px-6 py-2.5 bg-white text-surface-container-lowest font-bold rounded-lg hover:bg-white/90 transition-colors text-sm"
               >
-                Discover Personas
+                Discover Specialists
               </a>
             </div>
           ) : (
@@ -112,17 +112,17 @@ export default async function FeedPage() {
                   <div key={post.id} className="mb-8">
                     {/* Tiny header showing who posted this to identify in a mixed feed */}
                     <div className="flex items-center gap-3 mb-3">
-                      <a href={`/${post.persona.slug}`} className="relative w-8 h-8 rounded-full overflow-hidden bg-surface-container-high border border-outline-variant/10">
-                        {post.persona.avatarUrl ? (
-                          <img src={post.persona.avatarUrl} alt={post.persona.name} className="object-cover w-full h-full" />
+                      <a href={`/${post.specialist.slug}`} className="relative w-8 h-8 rounded-full overflow-hidden bg-surface-container-high border border-outline-variant/10">
+                        {post.specialist.avatarUrl ? (
+                          <img src={post.specialist.avatarUrl} alt={post.specialist.name} className="object-cover w-full h-full" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary-container/20">
-                            <span className="text-xs font-bold text-primary">{post.persona.name[0]}</span>
+                            <span className="text-xs font-bold text-primary">{post.specialist.name[0]}</span>
                           </div>
                         )}
                       </a>
-                      <a href={`/${post.persona.slug}`} className="text-sm font-bold text-white hover:text-primary transition-colors">
-                        {post.persona.name}
+                      <a href={`/${post.specialist.slug}`} className="text-sm font-bold text-white hover:text-primary transition-colors">
+                        {post.specialist.name}
                       </a>
                       <span className="text-xs text-outline">•</span>
                       <span className="text-xs text-outline">{new Date(post.createdAt).toLocaleDateString()}</span>

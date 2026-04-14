@@ -33,7 +33,7 @@ const VISIBILITY_OPTIONS: VisibilityOption[] = [
 export default function NewPostPage() {
   const router = useRouter()
   const params = useParams()
-  const personaId = params.personaId as string
+  const specialistId = params.specialistId as string
 
   const [content, setContent] = useState('')
   const [visibility, setVisibility] = useState<Visibility>('PUBLIC')
@@ -54,7 +54,7 @@ export default function NewPostPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          personaId,
+          specialistId,
           content,
           visibility,
           mediaUrls,

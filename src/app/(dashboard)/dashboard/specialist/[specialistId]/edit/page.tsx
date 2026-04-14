@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { ImageUpload } from '@/components/ui/ImageUpload'
-import type { Persona } from '@/types'
+import type { Specialist } from '@/types'
 
 interface EditFormState {
   name: string
@@ -20,12 +20,12 @@ interface EditFormState {
   coverUrl: string
 }
 
-export default function EditPersonaPage() {
+export default function EditSpecialistPage() {
   const router = useRouter()
   const params = useParams()
-  const personaId = params.personaId as string
+  const specialistId = params.specialistId as string
 
-  const [persona, setPersona] = useState<Persona | null>(null)
+  const [specialist, setSpecialist] = useState<Specialist | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -46,12 +46,12 @@ export default function EditPersonaPage() {
     async function load() {
       setLoading(true)
       try {
-        const res = await fetch(`/api/personas/${personaId}`)
+        const res = await fetch(`/api/specialists/${specialistId}`)
         if (res.ok) {
-          const data = (await res.json()) as Persona & {
+          const data = (await res.json()) as Specialist & {
             systemPrompt?: string | null
           }
-          setPersona(data)
+          setSpecialist(data)
           setForm({
             name: data.name ?? '',
             bio: data.bio ?? '',
@@ -66,13 +66,13 @@ export default function EditPersonaPage() {
           })
         }
       } catch {
-        setError('Failed to load persona.')
+        setError('Failed to load specialist.')
       } finally {
         setLoading(false)
       }
     }
     void load()
-  }, [personaId])
+  }, [specialistId])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -80,7 +80,7 @@ export default function EditPersonaPage() {
     setError('')
     setSuccess(false)
     try {
-      const res = await fetch(`/api/personas/${personaId}`, {
+      const res = await fetch(`/api/specialists/${specialistId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -117,15 +117,15 @@ export default function EditPersonaPage() {
       <div className="flex items-start justify-between mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-black tracking-tighter text-white">
-            Edit Persona
+            Edit Specialist
           </h1>
-          <p className="text-outline mt-1">{persona?.name}</p>
+          <p className="text-outline mt-1">{specialist?.name}</p>
         </div>
         <div className="flex gap-3 flex-shrink-0">
-          {persona && (
+          {specialist && (
             <Button variant="secondary" size="sm" asChild>
               <a
-                href={`/${persona.slug}`}
+                href={`/${specialist.slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -139,9 +139,9 @@ export default function EditPersonaPage() {
               </a>
             </Button>
           )}
-          {persona && (
+          {specialist && (
             <Button variant="outline" size="sm" asChild>
-              <a href={`/dashboard/persona/${personaId}/posts/new`}>
+              <a href={`/dashboard/specialist/${specialistId}/posts/new`}>
                 <span
                   className="material-symbols-outlined text-base"
                   aria-hidden="true"
@@ -248,8 +248,8 @@ export default function EditPersonaPage() {
           </div>
         </section>
 
-        {/* AI system prompt — only for AI personas */}
-        {persona?.type === 'AI' && (
+        {/* AI system prompt — only for AI specialists */}
+        {specialist?.type === 'AI' && (
           <section
             className="bg-surface-container rounded-xl p-6 border border-primary/20 space-y-4"
             aria-labelledby="edit-prompt-heading"
@@ -273,7 +273,7 @@ export default function EditPersonaPage() {
               }
               rows={10}
               className="font-mono text-xs"
-              placeholder="Describe your AI persona's personality, expertise, and communication style..."
+              placeholder="Describe your AI specialist's specialistlity, expertise, and communication style..."
               aria-label="AI system prompt"
             />
           </section>

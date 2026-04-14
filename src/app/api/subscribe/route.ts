@@ -9,10 +9,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const { personaId }: { personaId: string } = await req.json()
+  const { specialistId }: { specialistId: string } = await req.json()
 
-  if (!personaId) {
-    return NextResponse.json({ error: 'Missing personaId' }, { status: 400 })
+  if (!specialistId) {
+    return NextResponse.json({ error: 'Missing specialistId' }, { status: 400 })
   }
 
   const user = await prisma.user.findUnique({ where: { clerkId: userId } })
@@ -20,12 +20,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 })
   }
 
-  const persona = await prisma.persona.findUnique({ where: { id: personaId } })
-  if (!persona || !persona.isPublished) {
-    return NextResponse.json({ error: 'Persona not found' }, { status: 404 })
+  const specialist = await prisma.specialist.findUnique({ where: { id: specialistId } })
+  if (!specialist || !specialist.isPublished) {
+    return NextResponse.json({ error: 'Specialist not found' }, { status: 404 })
   }
 
-  if (!persona.stripePriceId) {
+  if (!specialist.stripePriceId) {
     return NextResponse.json(
       { error: 'Subscription not configured' },
       { status: 400 }
@@ -35,11 +35,11 @@ export async function POST(req: Request) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL!
 
   const session = await createCheckoutSession({
-    priceId: persona.stripePriceId,
-    personaId,
+    priceId: specialist.stripePriceId,
+    specialistId,
     subscriberId: user.id,
-    successUrl: `${appUrl}/${persona.slug}?subscribed=true`,
-    cancelUrl: `${appUrl}/${persona.slug}`,
+    successUrl: `${appUrl}/${specialist.slug}?subscribed=true`,
+    cancelUrl: `${appUrl}/${specialist.slug}`,
     customerEmail: user.email,
   })
 

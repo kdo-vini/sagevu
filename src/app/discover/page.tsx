@@ -1,21 +1,21 @@
 import { Navbar } from '@/components/layout/Navbar'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { MobileNav } from '@/components/layout/MobileNav'
-import { DiscoverGrid } from '@/components/persona/DiscoverGrid'
+import { DiscoverGrid } from '@/components/specialist/DiscoverGrid'
 import { prisma } from '@/lib/prisma'
-import type { Persona } from '@/types'
+import type { Specialist } from '@/types'
 
 export const dynamic = 'force-dynamic'
 
-async function getPersonas(): Promise<Persona[]> {
+async function getSpecialists(): Promise<Specialist[]> {
   try {
-    const personas = await prisma.persona.findMany({
+    const specialists = await prisma.specialist.findMany({
       where: { isPublished: true },
       include: { creator: { select: { name: true, avatarUrl: true } } },
       orderBy: { createdAt: 'desc' },
     })
 
-    return personas.map((p) => ({
+    return specialists.map((p) => ({
       id: p.id,
       creatorId: p.creatorId,
       name: p.name,
@@ -43,10 +43,10 @@ async function getPersonas(): Promise<Persona[]> {
 }
 
 export default async function DiscoverPage() {
-  const personas = await getPersonas()
+  const specialists = await getSpecialists()
 
-  const aiCount = personas.filter((p) => p.type === 'AI').length
-  const humanCount = personas.filter((p) => p.type === 'HUMAN').length
+  const aiCount = specialists.filter((p) => p.type === 'AI').length
+  const humanCount = specialists.filter((p) => p.type === 'HUMAN').length
 
   return (
     <div className="min-h-screen">
@@ -65,7 +65,7 @@ export default async function DiscoverPage() {
                 </span>
               </h1>
               <p className="text-on-surface-variant text-lg max-w-xl mx-auto">
-                Subscribe to AI and human expert personas. Get exclusive
+                Subscribe to AI and human expert specialists. Get exclusive
                 content, direct messaging, and unparalleled access.
               </p>
             </div>
@@ -73,7 +73,7 @@ export default async function DiscoverPage() {
             {/* Stats bar */}
             <div className="flex items-center justify-center gap-12 py-6 border-y border-outline-variant/20">
               {[
-                { label: 'Expert Personas', value: personas.length.toString() },
+                { label: 'Expert Specialists', value: specialists.length.toString() },
                 { label: 'AI Powered', value: aiCount.toString() },
                 { label: 'Human Experts', value: humanCount.toString() },
               ].map((stat) => (
@@ -87,7 +87,7 @@ export default async function DiscoverPage() {
             </div>
           </section>
 
-          <DiscoverGrid personas={personas} />
+          <DiscoverGrid specialists={specialists} />
         </main>
       </div>
       <MobileNav />

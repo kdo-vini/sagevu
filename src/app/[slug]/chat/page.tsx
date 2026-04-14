@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 import { Navbar } from '@/components/layout/Navbar'
 import { ChatWindow } from '@/components/chat/ChatWindow'
 import { prisma } from '@/lib/prisma'
-import type { Persona, Message } from '@/types'
+import type { Specialist, Message } from '@/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,11 +13,11 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params
-  const persona = await prisma.persona.findUnique({ where: { slug } })
-  if (!persona) return { title: 'Not Found' }
+  const specialist = await prisma.specialist.findUnique({ where: { slug } })
+  if (!specialist) return { title: 'Not Found' }
   return {
-    title: `Chat with ${persona.name} — Sagevu`,
-    description: `Direct messaging with ${persona.name} on Sagevu.`,
+    title: `Chat with ${specialist.name} — Sagevu`,
+    description: `Direct messaging with ${specialist.name} on Sagevu.`,
   }
 }
 
@@ -29,19 +29,19 @@ export default async function ChatPage({ params }: PageProps) {
     redirect(`/sign-in?redirect_url=/${slug}/chat`)
   }
 
-  const persona = await prisma.persona.findUnique({ where: { slug } })
-  if (!persona || !persona.isPublished) notFound()
+  const specialist = await prisma.specialist.findUnique({ where: { slug } })
+  if (!specialist || !specialist.isPublished) notFound()
 
   const user = await prisma.user.findUnique({ where: { clerkId: userId } })
   if (!user) redirect('/sign-in')
 
   // Verify subscription — owner bypasses check
-  const isOwner = user.id === persona.creatorId
+  const isOwner = user.id === specialist.creatorId
   if (!isOwner) {
     const subscription = await prisma.subscription.findFirst({
       where: {
         subscriberId: user.id,
-        personaId: persona.id,
+        specialistId: specialist.id,
         status: 'ACTIVE',
         currentPeriodEnd: { gt: new Date() },
       },
@@ -54,8 +54,8 @@ export default async function ChatPage({ params }: PageProps) {
   // Load or create the conversation record
   const conversation = await prisma.conversation.findUnique({
     where: {
-      personaId_subscriberId: {
-        personaId: persona.id,
+      specialistId_subscriberId: {
+        specialistId: specialist.id,
         subscriberId: user.id,
       },
     },
@@ -67,23 +67,23 @@ export default async function ChatPage({ params }: PageProps) {
     },
   })
 
-  const personaData: Persona = {
-    id: persona.id,
-    creatorId: persona.creatorId,
-    name: persona.name,
-    slug: persona.slug,
-    bio: persona.bio ?? null,
-    avatarUrl: persona.avatarUrl ?? null,
-    coverUrl: persona.coverUrl ?? null,
-    type: persona.type as 'HUMAN' | 'AI',
-    specialty: persona.specialty ?? null,
-    tagline: persona.tagline ?? null,
-    isPublished: persona.isPublished,
-    subscriptionPrice: persona.subscriptionPrice,
-    currency: persona.currency,
-    stripePriceId: persona.stripePriceId ?? null,
-    createdAt: persona.createdAt.toISOString(),
-    updatedAt: persona.updatedAt.toISOString(),
+  const specialistData: Specialist = {
+    id: specialist.id,
+    creatorId: specialist.creatorId,
+    name: specialist.name,
+    slug: specialist.slug,
+    bio: specialist.bio ?? null,
+    avatarUrl: specialist.avatarUrl ?? null,
+    coverUrl: specialist.coverUrl ?? null,
+    type: specialist.type as 'HUMAN' | 'AI',
+    specialty: specialist.specialty ?? null,
+    tagline: specialist.tagline ?? null,
+    isPublished: specialist.isPublished,
+    subscriptionPrice: specialist.subscriptionPrice,
+    currency: specialist.currency,
+    stripePriceId: specialist.stripePriceId ?? null,
+    createdAt: specialist.createdAt.toISOString(),
+    updatedAt: specialist.updatedAt.toISOString(),
   }
 
   const initialMessages: Message[] = (conversation?.messages ?? []).map(
@@ -102,7 +102,7 @@ export default async function ChatPage({ params }: PageProps) {
       <div className="flex-1 pt-20 flex flex-col">
         <div className="flex-1 max-w-4xl w-full mx-auto flex flex-col h-[calc(100vh-80px)]">
           <ChatWindow
-            persona={personaData}
+            specialist={specialistData}
             conversationId={conversation?.id ?? null}
             initialMessages={initialMessages}
           />

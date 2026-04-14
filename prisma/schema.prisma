@@ -18,12 +18,12 @@ model User {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   conversations Conversation[]
-  personas      Persona[]
+  specialists   Specialist[]
   projects      Project[]      @relation("ClientProjects")
   subscriptions Subscription[]
 }
 
-model Persona {
+model Specialist {
   id                String         @id @default(cuid())
   creatorId         String
   name              String
@@ -31,7 +31,7 @@ model Persona {
   bio               String?
   avatarUrl         String?
   coverUrl          String?
-  type              PersonaType    @default(HUMAN)
+  type              SpecialistType @default(HUMAN)
   specialty         String?
   tagline           String?
   systemPrompt      String?
@@ -51,32 +51,32 @@ model Persona {
 
 model Post {
   id         String     @id @default(cuid())
-  personaId  String
-  content    String
-  mediaUrls  String[]
-  visibility Visibility @default(PUBLIC)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  persona    Persona    @relation(fields: [personaId], references: [id])
+  specialistId  String
+  content       String
+  mediaUrls     String[]
+  visibility    Visibility @default(PUBLIC)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  specialist    Specialist @relation(fields: [specialistId], references: [id])
 }
 
 model Subscription {
   id                   String             @id @default(cuid())
   subscriberId         String
-  personaId            String
+  specialistId         String
   stripeSubscriptionId String             @unique
   stripeCustomerId     String
   status               SubscriptionStatus @default(ACTIVE)
   currentPeriodEnd     DateTime
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
-  persona              Persona            @relation(fields: [personaId], references: [id])
+  specialist           Specialist         @relation(fields: [specialistId], references: [id])
   subscriber           User               @relation(fields: [subscriberId], references: [id])
 }
 
 model Project {
   id                    String        @id @default(cuid())
-  personaId             String
+  specialistId          String
   clientId              String?
   title                 String
   description           String
@@ -86,19 +86,19 @@ model Project {
   createdAt             DateTime      @default(now())
   updatedAt             DateTime      @updatedAt
   client                User?         @relation("ClientProjects", fields: [clientId], references: [id])
-  persona               Persona       @relation(fields: [personaId], references: [id])
+  specialist            Specialist    @relation(fields: [specialistId], references: [id])
 }
 
 model Conversation {
   id           String    @id @default(cuid())
-  personaId    String
+  specialistId String
   subscriberId String
-  createdAt    DateTime  @default(now())
-  persona      Persona   @relation(fields: [personaId], references: [id])
-  subscriber   User      @relation(fields: [subscriberId], references: [id])
+  createdAt    DateTime   @default(now())
+  specialist   Specialist @relation(fields: [specialistId], references: [id])
+  subscriber   User       @relation(fields: [subscriberId], references: [id])
   messages     Message[]
 
-  @@unique([personaId, subscriberId])
+  @@unique([specialistId, subscriberId])
 }
 
 model Message {
@@ -116,7 +116,7 @@ enum Role {
   ADMIN
 }
 
-enum PersonaType {
+enum SpecialistType {
   HUMAN
   AI
 }

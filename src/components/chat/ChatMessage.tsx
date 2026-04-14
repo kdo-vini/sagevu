@@ -5,21 +5,21 @@ import type { Message } from '@/types'
 
 interface ChatMessageProps {
   message: Message
-  personaName?: string
-  personaAvatarUrl?: string | null
+  specialistName?: string
+  specialistAvatarUrl?: string | null
   userName?: string | null
   userAvatarUrl?: string | null
 }
 
 export function ChatMessage({
   message,
-  personaName,
-  personaAvatarUrl,
+  specialistName,
+  specialistAvatarUrl,
   userName,
   userAvatarUrl,
 }: ChatMessageProps) {
   const isUser = message.role === 'USER'
-  const displayName = isUser ? (userName ?? 'You') : (personaName ?? 'AI')
+  const displayName = isUser ? (userName ?? 'You') : (specialistName ?? 'AI')
 
   return (
     <div
@@ -47,9 +47,9 @@ export function ChatMessage({
               </span>
             </div>
           )
-        ) : personaAvatarUrl ? (
+        ) : specialistAvatarUrl ? (
           <Image
-            src={personaAvatarUrl}
+            src={specialistAvatarUrl}
             alt=""
             width={36}
             height={36}
@@ -58,7 +58,7 @@ export function ChatMessage({
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary-container/20">
             <span className="text-xs font-bold text-primary">
-              {(personaName ?? 'A')[0].toUpperCase()}
+              {(specialistName ?? 'A')[0].toUpperCase()}
             </span>
           </div>
         )}

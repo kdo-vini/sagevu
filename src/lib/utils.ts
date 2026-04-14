@@ -41,13 +41,13 @@ export function formatRelativeTime(date: Date): string {
 
 export async function hasActiveSubscription(
   userId: string,
-  personaId: string
+  specialistId: string
 ): Promise<boolean> {
   const { prisma } = await import('@/lib/prisma')
   const sub = await prisma.subscription.findFirst({
     where: {
       subscriberId: userId,
-      personaId,
+      specialistId,
       status: 'ACTIVE',
       currentPeriodEnd: { gt: new Date() },
     },

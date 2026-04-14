@@ -31,10 +31,10 @@ export default async function DashboardLayout({
                 Overview
               </Link>
               <Link
-                href="/dashboard/persona/new"
+                href="/dashboard/specialist/new"
                 className="text-sm font-medium text-outline hover:text-white transition-colors"
               >
-                New Persona
+                New Specialist
               </Link>
             </nav>
           </div>

@@ -1,9 +1,9 @@
-export type PersonaType = 'HUMAN' | 'AI'
+export type SpecialistType = 'HUMAN' | 'AI'
 export type PostVisibility = 'PUBLIC' | 'SUBSCRIBERS_ONLY'
 export type SubscriptionStatus = 'ACTIVE' | 'CANCELED' | 'PAST_DUE' | 'INCOMPLETE'
 export type MessageRole = 'USER' | 'ASSISTANT'
 
-export interface Persona {
+export interface Specialist {
   id: string
   creatorId: string
   name: string
@@ -11,7 +11,7 @@ export interface Persona {
   bio?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
-  type: PersonaType
+  type: SpecialistType
   specialty?: string | null
   tagline?: string | null
   isPublished: boolean
@@ -25,13 +25,13 @@ export interface Persona {
 
 export interface Post {
   id: string
-  personaId: string
+  specialistId: string
   content: string
   mediaUrls: string[]
   visibility: PostVisibility
   createdAt: string
   updatedAt: string
-  persona?: Pick<Persona, 'name' | 'avatarUrl' | 'slug'>
+  specialist?: Pick<Specialist, 'name' | 'avatarUrl' | 'slug'>
 }
 
 export interface Message {
@@ -44,7 +44,7 @@ export interface Message {
 
 export interface Conversation {
   id: string
-  personaId: string
+  specialistId: string
   subscriberId: string
   createdAt: string
   messages?: Message[]

@@ -23,7 +23,7 @@ interface FormState {
   coverUrl: string
 }
 
-export default function NewPersonaPage() {
+export default function NewSpecialistPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -58,7 +58,7 @@ export default function NewPersonaPage() {
     setLoading(true)
     setError('')
     try {
-      const res = await fetch('/api/personas', {
+      const res = await fetch('/api/specialists', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -69,11 +69,11 @@ export default function NewPersonaPage() {
       })
       if (!res.ok) {
         const data = (await res.json()) as { error?: string }
-        setError(data.error ?? 'Failed to create persona')
+        setError(data.error ?? 'Failed to create specialist')
         return
       }
-      const persona = (await res.json()) as { id: string }
-      router.push(`/dashboard/persona/${persona.id}/edit`)
+      const specialist = (await res.json()) as { id: string }
+      router.push(`/dashboard/specialist/${specialist.id}/edit`)
     } catch {
       setError('Something went wrong. Please try again.')
     } finally {
@@ -85,7 +85,7 @@ export default function NewPersonaPage() {
     <div className="max-w-2xl mx-auto px-6 py-10">
       <div className="mb-8">
         <h1 className="text-3xl font-black tracking-tighter text-white">
-          Create a Persona
+          Create a Specialist
         </h1>
         <p className="text-outline mt-1">
           Build your expert presence on Sagevu
@@ -102,7 +102,7 @@ export default function NewPersonaPage() {
             id="type-heading"
             className="text-white font-bold mb-4"
           >
-            Persona Type
+            Specialist Type
           </h2>
           <div className="grid grid-cols-2 gap-4" role="radiogroup" aria-labelledby="type-heading">
             {(['HUMAN', 'AI'] as const).map((type) => (
@@ -126,13 +126,13 @@ export default function NewPersonaPage() {
                     {type === 'AI' ? 'smart_toy' : 'person'}
                   </span>
                   <span className="text-white font-bold">
-                    {type === 'AI' ? 'AI Persona' : 'Human Expert'}
+                    {type === 'AI' ? 'AI Specialist' : 'Human Expert'}
                   </span>
                 </div>
                 <p className="text-outline text-xs">
                   {type === 'AI'
                     ? 'An AI character powered by GPT-4o. Responds automatically.'
-                    : 'You respond personally to subscriber messages.'}
+                    : 'You respond specialistlly to subscriber messages.'}
                 </p>
               </button>
             ))}
@@ -266,11 +266,11 @@ export default function NewPersonaPage() {
                 psychology
               </span>
               <h2 id="system-prompt-heading" className="text-white font-bold">
-                AI Personality &amp; System Prompt
+                AI Specialistlity &amp; System Prompt
               </h2>
             </div>
             <p className="text-outline text-sm">
-              Define how your AI persona thinks, speaks, and responds. This
+              Define how your AI specialist thinks, speaks, and responds. This
               prompt is private and never shown to subscribers.
             </p>
             <div className="space-y-2">
@@ -329,7 +329,7 @@ You help subscribers understand: AI strategy, emerging tech, futures research, a
               />
               <span className="text-outline text-sm select-none">/month</span>
             </div>
-            <p className="text-outline text-xs">Set to $0 for a free persona</p>
+            <p className="text-outline text-xs">Set to $0 for a free specialist</p>
           </div>
         </section>
 
@@ -337,9 +337,9 @@ You help subscribers understand: AI strategy, emerging tech, futures research, a
         <section className="bg-surface-container rounded-xl p-6 border border-outline-variant/10">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-white font-bold">Publish Persona</h2>
+              <h2 className="text-white font-bold">Publish Specialist</h2>
               <p className="text-outline text-sm mt-1">
-                Make your persona visible to the public
+                Make your specialist visible to the public
               </p>
             </div>
             <Switch
@@ -347,7 +347,7 @@ You help subscribers understand: AI strategy, emerging tech, futures research, a
               onCheckedChange={(checked) =>
                 setForm((prev) => ({ ...prev, isPublished: checked }))
               }
-              aria-label="Publish persona"
+              aria-label="Publish specialist"
             />
           </div>
         </section>
@@ -387,7 +387,7 @@ You help subscribers understand: AI strategy, emerging tech, futures research, a
                 Creating...
               </>
             ) : (
-              'Create Persona'
+              'Create Specialist'
             )}
           </Button>
         </div>

@@ -14,42 +14,42 @@ export async function POST(req: Request) {
   }
 
   const {
-    personaId,
+    specialistId,
     content,
     mediaUrls,
     visibility,
   }: {
-    personaId: string
+    specialistId: string
     content: string
     mediaUrls?: string[]
     visibility?: string
   } = await req.json()
 
-  if (!personaId || !content) {
+  if (!specialistId || !content) {
     return NextResponse.json(
-      { error: 'Missing personaId or content' },
+      { error: 'Missing specialistId or content' },
       { status: 400 }
     )
   }
 
-  // Only the owning creator can post on behalf of a persona
-  const persona = await prisma.persona.findFirst({
-    where: { id: personaId, creatorId: user.id },
+  // Only the owning creator can post on behalf of a specialist
+  const specialist = await prisma.specialist.findFirst({
+    where: { id: specialistId, creatorId: user.id },
   })
-  if (!persona) {
+  if (!specialist) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
   const post = await prisma.post.create({
     data: {
-      personaId,
+      specialistId,
       content,
       mediaUrls: mediaUrls ?? [],
       visibility:
         visibility === 'SUBSCRIBERS_ONLY' ? 'SUBSCRIBERS_ONLY' : 'PUBLIC',
     },
     include: {
-      persona: { select: { name: true, avatarUrl: true, slug: true } },
+      specialist: { select: { name: true, avatarUrl: true, slug: true } },
     },
   })
 
