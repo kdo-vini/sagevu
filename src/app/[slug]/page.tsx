@@ -30,6 +30,11 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function PersonaPage({ params }: PageProps) {
   const { slug } = await params
+  
+  // Prevent static file requests (e.g. favicon.ico, missing assets) from triggering auth()
+  // As they bypass middleware, calling auth() on them crashes Clerk.
+  if (slug.includes('.')) return notFound()
+  
   const { userId } = await auth()
 
   let persona

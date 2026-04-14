@@ -10,9 +10,22 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const user = await prisma.user.findUnique({ where: { clerkId: userId } })
+  let user = await prisma.user.findUnique({ where: { clerkId: userId } })
   if (!user) {
-    return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    // Fallback: If webhook didn't sync locally, create user on the fly
+    const { clerkClient } = await import('@clerk/nextjs/server')
+    const client = await clerkClient()
+    const clerkUser = await client.users.getUser(userId)
+    const email = clerkUser.emailAddresses[0]?.emailAddress ?? ''
+    
+    user = await prisma.user.create({
+      data: {
+        clerkId: userId,
+        email,
+        name: clerkUser.firstName ? `${clerkUser.firstName} ${clerkUser.lastName ?? ''}`.trim() : null,
+        avatarUrl: clerkUser.imageUrl,
+      }
+    })
   }
 
   const body = await req.json()

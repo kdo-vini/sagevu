@@ -19,13 +19,29 @@ export default function RootLayout({
       appearance={{
         baseTheme: dark,
         variables: {
-          colorPrimary: '#8781FF',
-          colorBackground: '#1F1F22',
-          colorText: '#E5E1E6',
-          colorInputBackground: '#2A2A2D',
-          colorInputText: '#E5E1E6',
-          borderRadius: '0.75rem',
+          colorPrimary: '#ffffff', // Minimalist clean primary
+          colorBackground: '#0a0a0f', // Match Sagevu lowest surface container
+          colorText: '#ffffff',
+          colorInputBackground: '#ffffff08', // Super subtle input bg
+          colorInputText: '#ffffff',
+          borderRadius: '1rem',
           fontFamily: 'Inter, sans-serif',
+        },
+        elements: {
+          card: 'bg-transparent shadow-none w-full border-none px-0 max-w-[400px] mx-auto',
+          headerTitle: 'text-3xl font-bold tracking-tight mb-2',
+          headerSubtitle: 'text-white/50 text-base',
+          formFieldLabel: 'hidden', // Hides the weird uppercase labels
+          formFieldInput: 'h-12 border-white/10 bg-white/5 px-4 text-base placeholder:text-white/30 ring-0 focus:ring-1 focus:ring-white/20 transition-all focus:border-white/20',
+          formButtonPrimary: 'h-12 text-black bg-white hover:bg-white/90 font-bold tracking-wide mt-2 shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all hover:scale-[1.02]',
+          dividerLine: 'bg-white/10',
+          dividerText: 'text-white/30 font-medium text-xs tracking-wider uppercase',
+          socialButtonsBlockButton: 'h-12 border border-white/10 bg-white/5 hover:bg-white/10 text-white font-medium transition-colors',
+          footerActionText: 'text-white/50',
+          footerActionLink: 'text-white font-semibold hover:text-white/80',
+          formFieldHintText: 'text-white/40 text-xs mt-1',
+          identityPreviewText: 'text-white',
+          identityPreviewEditButtonIcon: 'text-white/50 hover:text-white',
         },
       }}
     >
