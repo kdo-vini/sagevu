@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
 import { Navbar } from '@/components/layout/Navbar'
 import { ChatWindow } from '@/components/chat/ChatWindow'
+import { OffPlatformBanner } from '@/components/chat/OffPlatformBanner'
 import { prisma } from '@/lib/prisma'
 import type { Specialist, Message } from '@/types'
 
@@ -101,6 +102,7 @@ export default async function ChatPage({ params }: PageProps) {
       <Navbar />
       <div className="flex-1 pt-20 flex flex-col">
         <div className="flex-1 max-w-4xl w-full mx-auto flex flex-col h-[calc(100vh-80px)]">
+          <OffPlatformBanner />
           <ChatWindow
             specialist={specialistData}
             conversationId={conversation?.id ?? null}

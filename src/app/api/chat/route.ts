@@ -113,27 +113,29 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    // Verify the caller has an active, non-expired subscription for this specialist
-    const subscription = await prisma.subscription.findFirst({
-      where: {
-        subscriberId: user.id,
-        specialistId,
-        status: 'ACTIVE',
-        currentPeriodEnd: { gt: new Date() },
-      },
-    })
-    if (!subscription) {
-      return NextResponse.json(
-        { error: 'No active subscription' },
-        { status: 403 }
-      )
-    }
-
     const specialist = await prisma.specialist.findUnique({ where: { id: specialistId } })
     if (!specialist) {
       return NextResponse.json({ error: 'Specialist not found' }, { status: 404 })
     }
 
+    // Free specialists are open to all authenticated users.
+    // Paid specialists require an active, non-expired subscription.
+    if (specialist.subscriptionPrice > 0) {
+      const subscription = await prisma.subscription.findFirst({
+        where: {
+          subscriberId: user.id,
+          specialistId,
+          status: 'ACTIVE',
+          currentPeriodEnd: { gt: new Date() },
+        },
+      })
+      if (!subscription) {
+        return NextResponse.json(
+          { error: 'No active subscription' },
+          { status: 403 }
+        )
+      }
+    }
     // Rate limit — checked after subscription verification so we don't burn
     // quota slots for unauthorized callers
     const isAISpecialist = specialist.type === 'AI'
