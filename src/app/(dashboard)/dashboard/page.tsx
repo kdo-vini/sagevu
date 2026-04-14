@@ -37,18 +37,18 @@ export default async function DashboardPage() {
   const totalPosts = user.specialists.reduce((sum, p) => sum + p._count.posts, 0)
 
   return (
-    <div className="max-w-screen-xl mx-auto px-6 py-10">
+    <div className="max-w-screen-xl mx-auto px-4 md:px-6 py-6 md:py-10">
       {/* Header */}
-      <div className="flex items-center justify-between mb-10">
+      <div className="flex flex-wrap items-start justify-between gap-4 mb-8 md:mb-10">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter text-white">
+          <h1 className="text-2xl md:text-3xl font-black tracking-tighter text-white">
             Creator Dashboard
           </h1>
-          <p className="text-outline mt-1">Manage your specialists and content</p>
+          <p className="text-outline mt-1 text-sm md:text-base">Manage your specialists and content</p>
         </div>
         <Link
           href="/dashboard/specialist/new"
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-sm hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 px-4 md:px-5 py-2.5 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-sm hover:opacity-90 transition-opacity flex-shrink-0"
         >
           <span className="material-symbols-outlined text-base" aria-hidden="true">
             add
@@ -160,13 +160,13 @@ export default async function DashboardPage() {
 
                 {/* Body */}
                 <div className="p-5">
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h3 className="text-white font-bold text-base">
+                  <div className="flex items-start justify-between mb-3 gap-2">
+                    <div className="min-w-0">
+                      <h3 className="text-white font-bold text-base truncate">
                         {specialist.name}
                       </h3>
                       {specialist.specialty && (
-                        <p className="text-outline text-xs mt-0.5">
+                        <p className="text-outline text-xs mt-0.5 truncate">
                           {specialist.specialty}
                         </p>
                       )}

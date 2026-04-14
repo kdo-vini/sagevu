@@ -22,7 +22,7 @@ export function MobileNav() {
 
   return (
     <nav
-      className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl border-t border-outline-variant/10 z-50 flex items-center justify-around px-4"
+      className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl border-t border-outline-variant/10 z-50 flex items-center justify-around px-2"
       aria-label="Mobile navigation"
     >
       {navItems.map((item) => {
@@ -33,7 +33,7 @@ export function MobileNav() {
             href={item.href}
             aria-label={item.label}
             aria-current={isActive ? 'page' : undefined}
-            className="flex flex-col items-center justify-center gap-0.5 p-2"
+            className="flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] px-2"
           >
             <span
               className={cn(

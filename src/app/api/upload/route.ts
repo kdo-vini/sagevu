@@ -10,6 +10,11 @@ const ALLOWED_CONTENT_TYPES = new Set([
   'video/mp4',
 ])
 
+// Explicit allowlist — prevents path traversal and unintended bucket prefixes
+const ALLOWED_FOLDERS = new Set(['avatars', 'covers', 'posts', 'media'])
+
+const MAX_FILENAME_LENGTH = 100
+
 export async function POST(req: Request) {
   const { userId } = await auth()
   if (!userId) {
@@ -20,7 +25,7 @@ export async function POST(req: Request) {
   const {
     filename,
     contentType,
-    folder = 'uploads',
+    folder = 'media',
   }: { filename: string; contentType: string; folder?: string } = body
 
   if (!filename || !contentType) {
@@ -30,11 +35,39 @@ export async function POST(req: Request) {
     )
   }
 
+  if (typeof filename !== 'string' || filename.trim().length === 0) {
+    return NextResponse.json({ error: 'Invalid filename' }, { status: 400 })
+  }
+
+  if (filename.length > MAX_FILENAME_LENGTH) {
+    return NextResponse.json(
+      { error: `Filename exceeds maximum length of ${MAX_FILENAME_LENGTH} characters` },
+      { status: 400 }
+    )
+  }
+
   if (!ALLOWED_CONTENT_TYPES.has(contentType)) {
     return NextResponse.json({ error: 'Invalid content type' }, { status: 400 })
   }
 
-  const ext = filename.split('.').pop() ?? 'bin'
+  if (!ALLOWED_FOLDERS.has(folder)) {
+    return NextResponse.json(
+      { error: `Invalid folder. Allowed values: ${[...ALLOWED_FOLDERS].join(', ')}` },
+      { status: 400 }
+    )
+  }
+
+  // Derive extension from the content type (authoritative) rather than the
+  // caller-supplied filename to prevent extension spoofing
+  const EXT_MAP: Record<string, string> = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+    'image/gif': 'gif',
+    'video/mp4': 'mp4',
+  }
+  const ext = EXT_MAP[contentType] ?? 'bin'
+
   const key = `${folder}/${userId}/${Date.now()}-${Math.random()
     .toString(36)
     .slice(2)}.${ext}`

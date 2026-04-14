@@ -25,6 +25,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Specialist not found' }, { status: 404 })
   }
 
+  if (specialist.creatorId === user.id) {
+    return NextResponse.json(
+      { error: 'You cannot subscribe to your own specialist' },
+      { status: 400 }
+    )
+  }
+
   if (!specialist.stripePriceId) {
     return NextResponse.json(
       { error: 'Subscription not configured' },

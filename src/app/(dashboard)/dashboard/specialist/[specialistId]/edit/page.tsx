@@ -121,15 +121,15 @@ export default function EditSpecialistPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-10">
-      <div className="flex items-start justify-between mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-black tracking-tighter text-white">
+    <div className="max-w-2xl mx-auto px-4 md:px-6 py-6 md:py-10">
+      <div className="flex flex-wrap items-start justify-between mb-8 gap-4">
+        <div className="min-w-0">
+          <h1 className="text-2xl md:text-3xl font-black tracking-tighter text-white">
             Edit Specialist
           </h1>
-          <p className="text-outline mt-1">{specialist?.name}</p>
+          <p className="text-outline mt-1 truncate">{specialist?.name}</p>
         </div>
-        <div className="flex gap-3 flex-shrink-0">
+        <div className="flex flex-wrap gap-3 flex-shrink-0">
           {specialist && (
             <Button variant="secondary" size="sm" asChild>
               <a
@@ -228,8 +228,8 @@ export default function EditSpecialistPage() {
           <h2 id="edit-photos-heading" className="text-white font-bold">
             Photos
           </h2>
-          <div className="flex items-start gap-6">
-            <div>
+          <div className="flex flex-col sm:flex-row items-start gap-6">
+            <div className="w-full sm:w-auto">
               <p className="text-outline text-xs mb-2">Avatar</p>
               <ImageUpload
                 value={form.avatarUrl}
@@ -241,7 +241,7 @@ export default function EditSpecialistPage() {
                 aspect="square"
               />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 w-full">
               <p className="text-outline text-xs mb-2">Cover Image</p>
               <ImageUpload
                 value={form.coverUrl}
@@ -267,7 +267,7 @@ export default function EditSpecialistPage() {
           <p className="text-outline text-sm">
             You earn 85% of each subscription. Sagevu keeps 15%.
           </p>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-end gap-4">
             <div className="space-y-1">
               <Label htmlFor="edit-price">Monthly Price (R$)</Label>
               <Input
@@ -275,7 +275,7 @@ export default function EditSpecialistPage() {
                 type="number"
                 min={0}
                 step={0.01}
-                className="w-32"
+                className="w-36"
                 value={form.subscriptionPrice}
                 onChange={(e) =>
                   setForm((p) => ({
@@ -286,7 +286,7 @@ export default function EditSpecialistPage() {
               />
             </div>
             {form.subscriptionPrice > 0 && (
-              <p className="text-outline text-sm mt-5">
+              <p className="text-outline text-sm pb-1.5">
                 You receive{' '}
                 <span className="text-white font-medium">
                   R$ {(form.subscriptionPrice * 0.85).toFixed(2)}/mo
@@ -377,7 +377,7 @@ export default function EditSpecialistPage() {
           </div>
         )}
 
-        <div className="flex gap-4">
+        <div className="flex flex-col-reverse sm:flex-row gap-4">
           <Button
             type="button"
             variant="secondary"

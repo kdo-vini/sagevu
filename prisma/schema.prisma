@@ -47,6 +47,8 @@ model Specialist {
   posts             Post[]
   projects          Project[]
   subscriptions     Subscription[]
+
+  @@index([isPublished, createdAt])
 }
 
 model Post {
@@ -58,6 +60,8 @@ model Post {
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   specialist    Specialist @relation(fields: [specialistId], references: [id])
+
+  @@index([specialistId, createdAt])
 }
 
 model Subscription {
@@ -72,6 +76,8 @@ model Subscription {
   updatedAt            DateTime           @updatedAt
   specialist           Specialist         @relation(fields: [specialistId], references: [id])
   subscriber           User               @relation(fields: [subscriberId], references: [id])
+
+  @@index([subscriberId, specialistId, status])
 }
 
 model Project {
@@ -108,6 +114,8 @@ model Message {
   content        String
   createdAt      DateTime     @default(now())
   conversation   Conversation @relation(fields: [conversationId], references: [id])
+
+  @@index([conversationId, createdAt])
 }
 
 enum Role {

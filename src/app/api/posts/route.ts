@@ -172,9 +172,25 @@ export async function POST(req: Request) {
     visibility?: string
   } = await req.json()
 
-  if (!specialistId || !content) {
+  const trimmedContent = typeof content === 'string' ? content.trim() : ''
+
+  if (!specialistId || !trimmedContent) {
     return NextResponse.json(
       { error: 'Missing specialistId or content' },
+      { status: 400 }
+    )
+  }
+
+  if (trimmedContent.length > 5000) {
+    return NextResponse.json(
+      { error: 'Post content exceeds maximum length of 5000 characters' },
+      { status: 400 }
+    )
+  }
+
+  if (Array.isArray(mediaUrls) && mediaUrls.length > 10) {
+    return NextResponse.json(
+      { error: 'Cannot attach more than 10 media files per post' },
       { status: 400 }
     )
   }
@@ -190,7 +206,7 @@ export async function POST(req: Request) {
   const post = await prisma.post.create({
     data: {
       specialistId,
-      content,
+      content: trimmedContent,
       mediaUrls: mediaUrls ?? [],
       visibility:
         visibility === 'SUBSCRIBERS_ONLY' ? 'SUBSCRIBERS_ONLY' : 'PUBLIC',

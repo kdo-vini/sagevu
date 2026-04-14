@@ -52,6 +52,7 @@ export default async function SpecialistPage({ params }: PageProps) {
   if (!specialist || !specialist.isPublished) notFound()
 
   let isSubscribed = false
+  let isOwner = false
   let currentUserId: string | undefined
 
   if (userId) {
@@ -59,8 +60,9 @@ export default async function SpecialistPage({ params }: PageProps) {
     if (user) {
       currentUserId = user.id
 
-      // Owner always has access to their own specialist
+      // Owner always has full access to their own specialist
       if (user.id === specialist.creatorId) {
+        isOwner = true
         isSubscribed = true
       } else {
         const subscription = await prisma.subscription.findFirst({
@@ -95,22 +97,29 @@ export default async function SpecialistPage({ params }: PageProps) {
     updatedAt: specialist.updatedAt.toISOString(),
   }
 
-  const posts: Post[] = specialist.posts.map((p) => ({
-    id: p.id,
-    specialistId: p.specialistId,
-    content: p.content,
-    mediaUrls: p.mediaUrls,
-    visibility: p.visibility as 'PUBLIC' | 'SUBSCRIBERS_ONLY',
-    createdAt: p.createdAt.toISOString(),
-    updatedAt: p.updatedAt.toISOString(),
-  }))
+  // Redact content server-side before serializing to the client component.
+  // CSS-only paywalls are trivially bypassed in DevTools — the raw text must
+  // never reach the browser for locked posts.
+  const posts: Post[] = specialist.posts.map((p) => {
+    const locked = p.visibility === 'SUBSCRIBERS_ONLY' && !isSubscribed && !isOwner
+    return {
+      id: p.id,
+      specialistId: p.specialistId,
+      content: locked ? '' : p.content,
+      mediaUrls: locked ? [] : p.mediaUrls,
+      visibility: p.visibility as 'PUBLIC' | 'SUBSCRIBERS_ONLY',
+      locked,
+      createdAt: p.createdAt.toISOString(),
+      updatedAt: p.updatedAt.toISOString(),
+    }
+  })
 
   return (
     <div className="min-h-screen">
       <Navbar />
       <div className="flex pt-20">
         <Sidebar />
-        <main className="flex-1 lg:ml-72 min-h-screen px-6 lg:px-12 py-12 pb-20 lg:pb-12">
+        <main className="flex-1 lg:ml-72 min-h-screen px-4 md:px-6 lg:px-12 py-6 md:py-10 lg:py-12 pb-24 lg:pb-12">
           <SpecialistProfile
             specialist={specialistData}
             posts={posts}

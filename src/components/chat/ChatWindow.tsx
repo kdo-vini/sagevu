@@ -128,7 +128,7 @@ export function ChatWindow({
   return (
     <div className="flex flex-col h-full">
       {/* Chat header */}
-      <header className="flex items-center gap-4 px-6 py-4 border-b border-outline-variant/20 bg-surface-container-low flex-shrink-0">
+      <header className="flex items-center gap-3 px-4 md:px-6 py-3 md:py-4 border-b border-outline-variant/20 bg-surface-container-low flex-shrink-0">
         <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-surface-container-high flex-shrink-0">
           {specialist.avatarUrl ? (
             <img
@@ -163,7 +163,7 @@ export function ChatWindow({
 
       {/* Messages area */}
       <div
-        className="flex-1 overflow-y-auto p-6 space-y-2 no-scrollbar"
+        className="flex-1 overflow-y-auto p-3 md:p-6 space-y-2 no-scrollbar"
         role="list"
         aria-label="Chat messages"
         aria-live="polite"

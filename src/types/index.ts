@@ -29,6 +29,8 @@ export interface Post {
   content: string
   mediaUrls: string[]
   visibility: PostVisibility
+  /** True when the post is SUBSCRIBERS_ONLY and the viewer has no active subscription. Content and mediaUrls are empty strings/arrays when locked. */
+  locked?: boolean
   createdAt: string
   updatedAt: string
   specialist?: Pick<Specialist, 'name' | 'avatarUrl' | 'slug'>

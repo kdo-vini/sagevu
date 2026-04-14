@@ -50,7 +50,10 @@ export async function POST(req: Request) {
           subscriberId?: string
         }
 
-        if (!metadata.specialistId || !metadata.subscriberId) break
+        if (!metadata.specialistId || !metadata.subscriberId) {
+          console.error('[webhooks/stripe] Missing metadata on subscription:', subscription.id, metadata)
+          return NextResponse.json({ error: 'Missing required metadata' }, { status: 400 })
+        }
 
         await prisma.subscription.upsert({
           where: { stripeSubscriptionId: subscription.id },

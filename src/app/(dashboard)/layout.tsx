@@ -16,7 +16,7 @@ export default async function DashboardLayout({
       {/* Dashboard Top Nav */}
       <header className="fixed top-0 w-full z-50 bg-surface-container-lowest/80 backdrop-blur-xl border-b border-outline-variant/10 h-16">
         <div className="flex items-center justify-between px-6 h-full max-w-screen-xl mx-auto">
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4 md:gap-8">
             <Link
               href="/"
               className="text-xl font-black tracking-tighter text-white hover:text-primary transition-colors duration-200"
@@ -38,10 +38,10 @@ export default async function DashboardLayout({
               </Link>
             </nav>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <Link
               href="/"
-              className="text-outline hover:text-white text-sm transition-colors"
+              className="hidden sm:block text-outline hover:text-white text-sm transition-colors"
             >
               View Site
             </Link>

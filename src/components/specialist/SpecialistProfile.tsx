@@ -35,8 +35,8 @@ export function SpecialistProfile({
   return (
     <div>
       {/* Hero Banner */}
-      <section className="max-w-6xl mx-auto mb-16" aria-label="Profile header">
-        <div className="relative rounded-xl overflow-hidden h-[280px] mb-[-60px]">
+      <section className="max-w-6xl mx-auto mb-10 md:mb-16" aria-label="Profile header">
+        <div className="relative rounded-xl overflow-hidden h-[180px] sm:h-[220px] md:h-[280px] mb-[-48px] md:mb-[-60px]">
           <div
             className="absolute inset-0 bg-gradient-to-b from-transparent to-surface-container-lowest z-10"
             aria-hidden="true"
@@ -59,11 +59,11 @@ export function SpecialistProfile({
         </div>
 
         {/* Profile info row */}
-        <div className="relative z-20 px-4 md:px-8 flex flex-col md:flex-row md:items-end justify-between gap-8">
-          <div className="flex flex-col md:flex-row items-center md:items-end gap-6">
+        <div className="relative z-20 px-4 md:px-8 flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-8">
+          <div className="flex flex-col md:flex-row items-center md:items-end gap-4 md:gap-6">
             {/* Avatar */}
             <div className="relative flex-shrink-0">
-              <div className="w-32 h-32 rounded-xl border-4 border-surface-container-lowest bg-surface-container-high overflow-hidden shadow-2xl">
+              <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl border-4 border-surface-container-lowest bg-surface-container-high overflow-hidden shadow-2xl">
                 {specialist.avatarUrl ? (
                   <Image
                     src={specialist.avatarUrl}
@@ -74,7 +74,7 @@ export function SpecialistProfile({
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary-container/30">
-                    <span className="text-5xl font-black text-primary" aria-hidden="true">
+                    <span className="text-4xl md:text-5xl font-black text-primary" aria-hidden="true">
                       {specialist.name[0]}
                     </span>
                   </div>
@@ -87,11 +87,11 @@ export function SpecialistProfile({
 
             {/* Name & tagline */}
             <div className="text-center md:text-left pb-2">
-              <h1 className="text-white text-5xl font-black tracking-tighter mb-2 leading-none">
+              <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter mb-2 leading-none">
                 {specialist.name}
               </h1>
               {specialist.tagline && (
-                <p className="text-on-surface-variant max-w-md font-medium">
+                <p className="text-on-surface-variant max-w-md font-medium text-sm md:text-base">
                   {specialist.tagline}
                 </p>
               )}
@@ -99,11 +99,11 @@ export function SpecialistProfile({
           </div>
 
           {/* Action buttons */}
-          <div className="flex gap-4 mb-2">
+          <div className="flex flex-wrap justify-center md:justify-end gap-3 mb-2">
             {isSubscribed && (
               <Link
                 href={`/${specialist.slug}/chat`}
-                className="px-8 py-3 rounded-xl bg-surface-container-high border border-outline-variant/20 text-white font-bold hover:bg-surface-variant transition-colors duration-200 flex items-center gap-2"
+                className="px-5 md:px-8 py-3 rounded-xl bg-surface-container-high border border-outline-variant/20 text-white font-bold hover:bg-surface-variant transition-colors duration-200 flex items-center gap-2 min-h-[44px]"
               >
                 <span className="material-symbols-outlined text-lg" aria-hidden="true">
                   chat
@@ -112,7 +112,7 @@ export function SpecialistProfile({
               </Link>
             )}
             {!isOwner && (
-              <div className="min-w-[160px]">
+              <div className="w-full sm:w-auto sm:min-w-[160px]">
                 <SubscribeButton
                   specialistId={specialist.id}
                   specialistSlug={specialist.slug}
@@ -124,7 +124,7 @@ export function SpecialistProfile({
             {isOwner && (
               <Link
                 href={`/dashboard/specialist/${specialist.id}/edit`}
-                className="px-8 py-3 rounded-xl bg-surface-container-high border border-outline-variant/20 text-white font-bold hover:bg-surface-variant transition-colors duration-200 flex items-center gap-2"
+                className="px-5 md:px-8 py-3 rounded-xl bg-surface-container-high border border-outline-variant/20 text-white font-bold hover:bg-surface-variant transition-colors duration-200 flex items-center gap-2 min-h-[44px]"
               >
                 <span className="material-symbols-outlined text-lg" aria-hidden="true">
                   edit
