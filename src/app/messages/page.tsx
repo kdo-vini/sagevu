@@ -109,7 +109,10 @@ export default async function MessagesPage() {
                 // If I am the subscriber, the other party is the specialist.
                 const otherPartyName = isUserTheCreator ? (conv.subscriber.name || 'Subscriber') : conv.specialist.name
                 const otherPartyAvatar = isUserTheCreator ? conv.subscriber.avatarUrl : conv.specialist.avatarUrl
-                const linkHref = `/${conv.specialist.slug}/chat` // Chat route is currently standard under the specialist slug
+                // Creators go to the reply interface; subscribers go to the standard chat view
+                const linkHref = isUserTheCreator
+                  ? `/dashboard/conversations/${conv.id}`
+                  : `/${conv.specialist.slug}/chat`
                 
                 const lastMessage = conv.messages[0]
 

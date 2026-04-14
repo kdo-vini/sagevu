@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { ImageUpload } from '@/components/ui/ImageUpload'
 import { generateSlug } from '@/lib/utils'
+import { SPECIALTY_CATEGORIES } from '@/lib/specialtyCategories'
 
 interface FormState {
   name: string
@@ -180,14 +181,23 @@ export default function NewSpecialistPage() {
 
           <div className="space-y-2">
             <Label htmlFor="specialty">Specialty</Label>
-            <Input
+            <select
               id="specialty"
               value={form.specialty}
               onChange={(e) =>
                 setForm((prev) => ({ ...prev, specialty: e.target.value }))
               }
-              placeholder="e.g. AI Strategy & Systems Design"
-            />
+              className="flex h-10 w-full rounded-xl border border-outline-variant/20 bg-surface-container-high px-3 py-2 text-sm text-white placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="" disabled className="bg-surface-container-high text-outline">
+                Select a category...
+              </option>
+              {SPECIALTY_CATEGORIES.map((cat) => (
+                <option key={cat} value={cat} className="bg-surface-container-high text-white">
+                  {cat}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="space-y-2">

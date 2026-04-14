@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { ImageUpload } from '@/components/ui/ImageUpload'
 import type { Specialist } from '@/types'
+import { SPECIALTY_CATEGORIES } from '@/lib/specialtyCategories'
 
 interface EditFormState {
   name: string
@@ -65,7 +66,7 @@ export default function EditSpecialistPage() {
             isPublished: data.isPublished,
             avatarUrl: data.avatarUrl ?? '',
             coverUrl: data.coverUrl ?? '',
-            // DB stores cents; display as currency units (e.g. BRL reais)
+            // DB stores cents; display as currency units (e.g. USD)
             subscriptionPrice: (data.subscriptionPrice ?? 0) / 100,
           })
         }
@@ -186,14 +187,23 @@ export default function EditSpecialistPage() {
 
           <div className="space-y-2">
             <Label htmlFor="edit-specialty">Specialty</Label>
-            <Input
+            <select
               id="edit-specialty"
               value={form.specialty}
               onChange={(e) =>
                 setForm((p) => ({ ...p, specialty: e.target.value }))
               }
-              placeholder="e.g. AI Strategy"
-            />
+              className="flex h-10 w-full rounded-xl border border-outline-variant/20 bg-surface-container-high px-3 py-2 text-sm text-white placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="" disabled className="bg-surface-container-high text-outline">
+                Select a category...
+              </option>
+              {SPECIALTY_CATEGORIES.map((cat) => (
+                <option key={cat} value={cat} className="bg-surface-container-high text-white">
+                  {cat}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="space-y-2">
