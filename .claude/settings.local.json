@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__claude_ai_Stripe__get_stripe_account_info",
+      "Bash(npx tsx:*)",
+      "Bash(grep -n \"[^\\\\\\\\\\\\\\\\]\\\\`[^\\\\`]\" prisma/seed.ts)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx prisma:*)"
+    ]
+  }
+}
