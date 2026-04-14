@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { SpecialistBadge } from './SpecialistBadge'
 import { SubscribeButton } from './SubscribeButton'
+import { SubscriptionSuccessBanner } from './SubscriptionSuccessBanner'
 import { PostFeed } from './PostFeed'
 import { formatCurrency } from '@/lib/utils'
 import type { Specialist, Post } from '@/types'
@@ -11,6 +12,7 @@ interface SpecialistProfileProps {
   posts: Post[]
   isSubscribed: boolean
   currentUserId?: string
+  justSubscribed?: boolean
 }
 
 const SUBSCRIPTION_BENEFITS = [
@@ -24,6 +26,7 @@ export function SpecialistProfile({
   posts,
   isSubscribed,
   currentUserId,
+  justSubscribed,
 }: SpecialistProfileProps) {
   const isOwner = currentUserId === specialist.creatorId
 
@@ -34,6 +37,8 @@ export function SpecialistProfile({
 
   return (
     <div>
+      {justSubscribed && <SubscriptionSuccessBanner specialistSlug={specialist.slug} />}
+
       {/* Hero Banner */}
       <section className="max-w-6xl mx-auto mb-10 md:mb-16" aria-label="Profile header">
         <div className="relative rounded-xl overflow-hidden h-[180px] sm:h-[220px] md:h-[280px] mb-[-48px] md:mb-[-60px]">
@@ -209,7 +214,7 @@ export function SpecialistProfile({
         </div>
 
         {/* Right column — feed */}
-        <div className="lg:col-span-8 space-y-6">
+        <div id="posts-section" className="lg:col-span-8 space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-white text-2xl font-black tracking-tight">
               {specialist.type === 'AI' ? 'AI Intelligence Feed' : 'Latest Posts'}

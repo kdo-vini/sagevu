@@ -33,6 +33,12 @@ export function Navbar() {
           >
             Feed
           </Link>
+          <Link
+            href="/terms"
+            className="text-outline hover:text-white transition-colors duration-300 tracking-tighter font-bold text-xs"
+          >
+            Terms
+          </Link>
         </div>
 
         <div className="flex items-center gap-3 md:gap-6">

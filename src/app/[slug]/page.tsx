@@ -11,6 +11,7 @@ export const dynamic = 'force-dynamic'
 
 interface PageProps {
   params: Promise<{ slug: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
 export async function generateMetadata({ params }: PageProps) {
@@ -28,8 +29,9 @@ export async function generateMetadata({ params }: PageProps) {
   }
 }
 
-export default async function SpecialistPage({ params }: PageProps) {
-  const { slug } = await params
+export default async function SpecialistPage({ params, searchParams }: PageProps) {
+  const [{ slug }, resolvedSearch] = await Promise.all([params, searchParams])
+  const justSubscribed = resolvedSearch['subscribed'] === 'true'
   
   // Prevent static file requests (e.g. favicon.ico, missing assets) from triggering auth()
   // As they bypass middleware, calling auth() on them crashes Clerk.
@@ -125,6 +127,7 @@ export default async function SpecialistPage({ params }: PageProps) {
             posts={posts}
             isSubscribed={isSubscribed}
             currentUserId={currentUserId}
+            justSubscribed={justSubscribed}
           />
         </main>
       </div>

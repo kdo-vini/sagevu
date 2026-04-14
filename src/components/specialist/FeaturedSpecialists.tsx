@@ -99,7 +99,7 @@ function FeaturedCard({ specialist }: { specialist: FeaturedSpecialist }) {
                   </div>
                 )}
               </div>
-              <div className="absolute -bottom-1 -right-1">
+              <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4">
                 <SpecialistBadge type={specialist.type} size="sm" />
               </div>
             </div>

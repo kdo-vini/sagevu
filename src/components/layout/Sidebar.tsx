@@ -79,6 +79,12 @@ export function Sidebar() {
         >
           Become a Creator
         </Link>
+        <Link
+          href="/terms"
+          className="block w-full text-center text-outline text-xs hover:text-white transition-colors duration-200 py-1"
+        >
+          Terms of Service
+        </Link>
       </div>
     </aside>
   )
