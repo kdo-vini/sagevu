@@ -155,7 +155,7 @@ export default function TermsPage() {
                         'Sharing or soliciting personal contact information, including but not limited to: phone numbers, personal email addresses, WhatsApp numbers, Telegram usernames, Snapchat handles, Instagram or other social media profiles, Discord tags, or any other direct contact identifier.',
                         'Directing or encouraging another user to communicate via any channel outside of Sagevu.',
                         'Advertising, promoting, or linking to competing subscription platforms (e.g. OnlyFans, Fanvue, Patreon, etc.) within chats or posts.',
-                        'Soliciting payments, tips, or gifts outside of Sagevu's official payment infrastructure, including but not limited to: bank transfers, PayPal, Pix, cryptocurrency wallets, or any third-party payment service.',
+                        "Soliciting payments, tips, or gifts outside of Sagevu's official payment infrastructure, including but not limited to: bank transfers, PayPal, Pix, cryptocurrency wallets, or any third-party payment service.",
                         'Sharing URLs or deeplinks whose primary purpose is to redirect users away from Sagevu.',
                         'Using coded language or indirect methods to arrange off-platform contact.',
                       ].map((point, i) => (
