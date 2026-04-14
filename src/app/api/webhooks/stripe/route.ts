@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { stripe } from '@/lib/stripe'
 import { prisma } from '@/lib/prisma'
+import { createNotification } from '@/lib/notifications'
 import type { SubscriptionStatus } from '@prisma/client'
 
 function mapStripeStatus(status: Stripe.Subscription.Status): SubscriptionStatus {
@@ -74,15 +75,55 @@ export async function POST(req: Request) {
             ),
           },
         })
+
+        // Notify the specialist's creator about the new subscriber only on creation
+        if (event.type === 'customer.subscription.created') {
+          const [specialist, subscriber] = await Promise.all([
+            prisma.specialist.findUnique({ where: { id: metadata.specialistId } }),
+            prisma.user.findUnique({ where: { id: metadata.subscriberId } }),
+          ])
+
+          if (specialist) {
+            await createNotification({
+              userId: specialist.creatorId,
+              type: 'NEW_SUBSCRIBER',
+              title: 'New subscriber',
+              body: `${subscriber?.name ?? 'Someone'} subscribed to ${specialist.name}`,
+              link: '/dashboard',
+            })
+          }
+        }
+
         break
       }
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription
+
         await prisma.subscription.updateMany({
           where: { stripeSubscriptionId: subscription.id },
           data: { status: 'CANCELED' },
         })
+
+        // Notify the specialist's creator about the cancellation
+        const sub = await prisma.subscription.findUnique({
+          where: { stripeSubscriptionId: subscription.id },
+          include: {
+            specialist: true,
+            subscriber: true,
+          },
+        })
+
+        if (sub) {
+          await createNotification({
+            userId: sub.specialist.creatorId,
+            type: 'SUBSCRIBER_CANCELED',
+            title: 'Subscriber canceled',
+            body: `${sub.subscriber?.name ?? 'A subscriber'} canceled their subscription to ${sub.specialist.name}`,
+            link: '/dashboard',
+          })
+        }
+
         break
       }
     }

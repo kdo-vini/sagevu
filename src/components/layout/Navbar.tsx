@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { UserButton, useUser } from '@clerk/nextjs'
+import { NotificationBell } from './NotificationBell'
 
 export function Navbar() {
   const { isSignedIn } = useUser()
@@ -46,14 +47,7 @@ export function Navbar() {
               </span>
             </Link>
           )}
-          <button
-            aria-label="Notifications"
-            className="flex items-center justify-center min-w-[44px] min-h-[44px] text-outline hover:text-white transition-colors"
-          >
-            <span className="material-symbols-outlined" aria-hidden="true">
-              notifications
-            </span>
-          </button>
+          <NotificationBell />
           <UserButton
             appearance={{
               elements: {

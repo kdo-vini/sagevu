@@ -51,3 +51,25 @@ export interface Conversation {
   createdAt: string
   messages?: Message[]
 }
+
+export type NotificationType =
+  | 'NEW_SUBSCRIBER'
+  | 'SUBSCRIBER_CANCELED'
+  | 'NEW_MESSAGE'
+  | 'POST_PUBLISHED'
+  | 'SUBSCRIPTION_EXPIRING'
+  | 'PAYOUT_PROCESSED'
+  | 'PAYOUT_FAILED'
+  | 'CONTENT_REPORTED'
+  | 'SYSTEM'
+
+export interface Notification {
+  id: string
+  userId: string
+  type: NotificationType
+  title: string
+  body: string
+  link: string | null
+  read: boolean
+  createdAt: string
+}

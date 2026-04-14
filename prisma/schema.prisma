@@ -21,6 +21,7 @@ model User {
   specialists   Specialist[]
   projects      Project[]      @relation("ClientProjects")
   subscriptions Subscription[]
+  notifications Notification[]
 }
 
 model Specialist {
@@ -151,4 +152,30 @@ enum ProjectStatus {
 enum MessageRole {
   USER
   ASSISTANT
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String
+  link      String?
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id])
+
+  @@index([userId, read, createdAt])
+}
+
+enum NotificationType {
+  NEW_SUBSCRIBER
+  SUBSCRIBER_CANCELED
+  NEW_MESSAGE
+  POST_PUBLISHED
+  SUBSCRIPTION_EXPIRING
+  PAYOUT_PROCESSED
+  PAYOUT_FAILED
+  CONTENT_REPORTED
+  SYSTEM
 }
