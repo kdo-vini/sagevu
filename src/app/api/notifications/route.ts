@@ -20,21 +20,24 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const unreadOnly = searchParams.get('unread') === 'true'
 
-  const [notifications, unreadCount] = await Promise.all([
-    prisma.notification.findMany({
-      where: {
-        userId: user.id,
-        ...(unreadOnly ? { read: false } : {}),
-      },
-      orderBy: { createdAt: 'desc' },
-      take: 50,
-    }),
-    prisma.notification.count({
-      where: { userId: user.id, read: false },
-    }),
-  ])
-
-  return NextResponse.json({ notifications, unreadCount })
+  try {
+    const [notifications, unreadCount] = await Promise.all([
+      prisma.notification.findMany({
+        where: {
+          userId: user.id,
+          ...(unreadOnly ? { read: false } : {}),
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 50,
+      }),
+      prisma.notification.count({
+        where: { userId: user.id, read: false },
+      }),
+    ])
+    return NextResponse.json({ notifications, unreadCount })
+  } catch {
+    return NextResponse.json({ notifications: [], unreadCount: 0 })
+  }
 }
 
 // PATCH /api/notifications
@@ -65,21 +68,25 @@ export async function PATCH(req: Request) {
 
   const payload = body as Record<string, unknown>
 
-  if (payload.all === true) {
-    const result = await prisma.notification.updateMany({
-      where: { userId: user.id, read: false },
-      data: { read: true },
-    })
-    return NextResponse.json({ updated: result.count })
-  }
+  try {
+    if (payload.all === true) {
+      const result = await prisma.notification.updateMany({
+        where: { userId: user.id, read: false },
+        data: { read: true },
+      })
+      return NextResponse.json({ updated: result.count })
+    }
 
-  if (Array.isArray(payload.ids) && payload.ids.length > 0) {
-    const ids = payload.ids as string[]
-    const result = await prisma.notification.updateMany({
-      where: { id: { in: ids }, userId: user.id },
-      data: { read: true },
-    })
-    return NextResponse.json({ updated: result.count })
+    if (Array.isArray(payload.ids) && payload.ids.length > 0) {
+      const ids = payload.ids as string[]
+      const result = await prisma.notification.updateMany({
+        where: { id: { in: ids }, userId: user.id },
+        data: { read: true },
+      })
+      return NextResponse.json({ updated: result.count })
+    }
+  } catch {
+    return NextResponse.json({ updated: 0 })
   }
 
   return NextResponse.json(

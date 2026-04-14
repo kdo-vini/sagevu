@@ -113,11 +113,16 @@ export default async function NotificationsPage() {
   const user = await prisma.user.findUnique({ where: { clerkId: userId } })
   if (!user) redirect('/auth')
 
-  const notifications = await prisma.notification.findMany({
-    where: { userId: user.id },
-    orderBy: { createdAt: 'desc' },
-    take: 50,
-  })
+  let notifications: Awaited<ReturnType<typeof prisma.notification.findMany>> = []
+  try {
+    notifications = await prisma.notification.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+    })
+  } catch {
+    // Notification table may not exist yet in this environment
+  }
 
   const unreadCount = notifications.filter((n) => !n.read).length
 
