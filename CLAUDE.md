@@ -95,15 +95,30 @@ Dark-only theme. MD3-inspired color tokens as Tailwind extensions.
 - **Component lib:** Radix UI primitives wrapped as shadcn-style components in `src/components/ui/`
 - **Animations:** GSAP for landing page; Tailwind transitions elsewhere
 
-## 8. Remaining MVP Work
+## 8. Completed Work
 
-- [ ] **Stripe Connect** — implement actual revenue split (currently metadata-only); requires Connect account onboarding for creators
-- [x] **Price update flow** — `PATCH /api/specialists/[id]` calls `updateStripePrice`, edit page has pricing section
-- [x] **Post paywall enforcement** — `GET /api/posts` redacts locked posts for non-subscribers
-- [ ] **Supabase Realtime** — enable on `Message` table; wire `ChatWindow` to subscribe for live HUMAN specialist chat
-- [ ] **R2 env vars** — `CLOUDFLARE_R2_ACCOUNT_ID`, `CLOUDFLARE_R2_ACCESS_KEY_ID`, `CLOUDFLARE_R2_SECRET_ACCESS_KEY`, `CLOUDFLARE_R2_BUCKET_NAME`, `NEXT_PUBLIC_R2_PUBLIC_URL` required in production
-- [ ] **Stripe webhook env** — `STRIPE_WEBHOOK_SECRET` must be set; register endpoint in Stripe dashboard pointing to `/api/webhooks/stripe`
-- [ ] **Rate limiting on `/api/chat`** — no limit currently; add before launch to control OpenAI costs
-- [ ] **systemPrompt sanitization** — validate/sanitize AI specialist system prompts to prevent prompt injection
-- [ ] **Discovery grid seeding** — populate feed with real published specialists for new visitors
-- [ ] **Mobile responsiveness audit** — ChatWindow and Dashboard Navbar need responsive QA
+- [x] Price update flow — PATCH syncs Stripe, edit page has pricing section
+- [x] Post paywall — GET /api/posts redacts locked posts; [slug]/page.tsx strips content server-side
+- [x] Rate limiting — 20/hr AI, 60/hr Human on /api/chat (in-memory)
+- [x] systemPrompt sanitization — injection patterns stripped, 4000 char cap, fallback prompt
+- [x] Input validation — chat 2000 chars, posts 5000 chars, upload folder allowlist
+- [x] IDOR fix — conversationId verified against userId+specialistId
+- [x] Middleware rewrite — protect-by-allowlist; specialist profiles publicly browsable
+- [x] DB indexes — Subscription, Post, Message, Specialist composites
+- [x] Notification system — model, GET/PATCH API, bell in Navbar, Stripe webhook integration
+- [x] Dashboard analytics — stat cards, subscriber list page, recent activity
+- [x] Discover polish — search, featured specialists, pricing on cards
+- [x] Mobile responsiveness — Navbar, ChatWindow, Dashboard, SpecialistProfile
+- [x] Supabase Realtime — enabled on Message table
+
+## 9. Remaining Work
+
+- [ ] **Stripe Connect** — actual revenue split (currently metadata-only); Connect onboarding for creators
+- [ ] **R2 env vars** — CLOUDFLARE_R2_* required in production for image uploads
+- [ ] **Stripe webhook env** — STRIPE_WEBHOOK_SECRET must be set; register endpoint in Stripe dashboard
+- [ ] **Vercel env vars** — all env vars must be set; DATABASE_URL must use port 6543 (pooler)
+- [ ] **Supabase Realtime wiring** — ChatWindow needs WebSocket subscription for live Human specialist chat
+
+## 10. Reference Docs
+
+- `PRODUCT_SPEC.md` — 1300-line product specification (roles, interfaces, flows, data models, architecture)
