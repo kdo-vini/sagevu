@@ -18,6 +18,7 @@ interface EditFormState {
   isPublished: boolean
   avatarUrl: string
   coverUrl: string
+  subscriptionPrice: number
 }
 
 export default function EditSpecialistPage() {
@@ -40,6 +41,7 @@ export default function EditSpecialistPage() {
     isPublished: false,
     avatarUrl: '',
     coverUrl: '',
+    subscriptionPrice: 0,
   })
 
   useEffect(() => {
@@ -63,6 +65,8 @@ export default function EditSpecialistPage() {
             isPublished: data.isPublished,
             avatarUrl: data.avatarUrl ?? '',
             coverUrl: data.coverUrl ?? '',
+            // DB stores cents; display as currency units (e.g. BRL reais)
+            subscriptionPrice: (data.subscriptionPrice ?? 0) / 100,
           })
         }
       } catch {
@@ -83,7 +87,11 @@ export default function EditSpecialistPage() {
       const res = await fetch(`/api/specialists/${specialistId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          // Convert back to cents for the API
+          subscriptionPrice: Math.round(form.subscriptionPrice * 100),
+        }),
       })
       if (!res.ok) {
         const data = (await res.json()) as { error?: string }
@@ -245,6 +253,46 @@ export default function EditSpecialistPage() {
                 aspect="cover"
               />
             </div>
+          </div>
+        </section>
+
+        {/* Subscription pricing */}
+        <section
+          className="bg-surface-container rounded-xl p-6 border border-outline-variant/10 space-y-4"
+          aria-labelledby="edit-pricing-heading"
+        >
+          <h2 id="edit-pricing-heading" className="text-white font-bold">
+            Subscription Pricing
+          </h2>
+          <p className="text-outline text-sm">
+            You earn 85% of each subscription. Sagevu keeps 15%.
+          </p>
+          <div className="flex items-center gap-3">
+            <div className="space-y-1">
+              <Label htmlFor="edit-price">Monthly Price (R$)</Label>
+              <Input
+                id="edit-price"
+                type="number"
+                min={0}
+                step={0.01}
+                className="w-32"
+                value={form.subscriptionPrice}
+                onChange={(e) =>
+                  setForm((p) => ({
+                    ...p,
+                    subscriptionPrice: parseFloat(e.target.value) || 0,
+                  }))
+                }
+              />
+            </div>
+            {form.subscriptionPrice > 0 && (
+              <p className="text-outline text-sm mt-5">
+                You receive{' '}
+                <span className="text-white font-medium">
+                  R$ {(form.subscriptionPrice * 0.85).toFixed(2)}/mo
+                </span>
+              </p>
+            )}
           </div>
         </section>
 

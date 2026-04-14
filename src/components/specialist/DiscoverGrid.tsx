@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import Link from 'next/link'
 import { SpecialistCard } from '@/components/specialist/SpecialistCard'
 import type { Specialist } from '@/types'
 
@@ -64,7 +65,7 @@ export function DiscoverGrid({ specialists }: DiscoverGridProps) {
               : `Try switching filters to discover other specialists.`}
           </p>
           {filter === 'ALL' && (
-            <a
+            <Link
               href="/dashboard/specialist/new"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-sm hover:opacity-90 transition-opacity"
             >
@@ -72,7 +73,7 @@ export function DiscoverGrid({ specialists }: DiscoverGridProps) {
                 add
               </span>
               Create a Specialist
-            </a>
+            </Link>
           )}
         </div>
       ) : (

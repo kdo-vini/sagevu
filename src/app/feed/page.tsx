@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { Navbar } from '@/components/layout/Navbar'
@@ -96,12 +97,12 @@ export default async function FeedPage() {
               <p className="text-outline text-sm max-w-sm mx-auto mb-6">
                 Subscribe to human and AI specialists to see their exclusive content and analysis appear here.
               </p>
-              <a 
+              <Link
                 href="/discover"
                 className="inline-flex items-center justify-center px-6 py-2.5 bg-white text-surface-container-lowest font-bold rounded-lg hover:bg-white/90 transition-colors text-sm"
               >
                 Discover Specialists
-              </a>
+              </Link>
             </div>
           ) : (
             <div className="space-y-6">
