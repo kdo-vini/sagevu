@@ -3,8 +3,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  const isSignIn = pathname.includes('/sign-in')
+  // Handled by child component
 
   return (
     <div className="bg-surface-container-lowest text-on-surface font-body min-h-screen flex flex-col overflow-x-hidden selection:bg-primary/30 relative">
@@ -35,15 +34,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <div className="bg-surface-container border border-outline-variant/10 rounded-xl p-8 shadow-2xl relative overflow-hidden">
             {/* Inner Glow */}
             <div className="absolute inset-0 border border-primary/5 rounded-xl pointer-events-none"></div>
-            
-            {/* Sliding Toggle */}
-            <div className="relative bg-surface-container-low p-1 rounded-full flex mb-8">
-              <div 
-                className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-[#6C63FF] rounded-full shadow-lg transition-transform duration-300 transform ${isSignIn ? 'translate-x-0 left-1' : 'translate-x-full left-1'}`}
-              ></div>
-              <Link href="/sign-in" className={`relative z-10 w-1/2 py-2 text-sm text-center transition-colors ${isSignIn ? 'font-bold text-white' : 'font-medium text-outline hover:text-white'}`}>Sign In</Link>
-              <Link href="/sign-up" className={`relative z-10 w-1/2 py-2 text-sm text-center transition-colors ${!isSignIn ? 'font-bold text-white' : 'font-medium text-outline hover:text-white'}`}>Create Account</Link>
-            </div>
+            {/* Auth Unified Form Content */}
 
             {/* Clerk Form Content */}
             <div className="w-full">

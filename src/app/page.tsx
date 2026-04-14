@@ -182,18 +182,18 @@ export default function LandingPage() {
             <a href="#creators" className="text-sm text-white/50 hover:text-white transition-colors">Creators</a>
           </div>
           <div className="flex items-center gap-3">
-            <Link
-              href="/sign-in"
-              className="px-4 py-2 text-sm font-semibold text-white/70 hover:text-white transition-colors"
-            >
-              Sign in
-            </Link>
-            <Link
-              href="/sign-up"
-              className="px-5 py-2.5 text-sm font-bold bg-white text-[#0A0A0F] rounded-full hover:bg-white/90 transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.15)]"
-            >
-              Get Started
-            </Link>
+                  <Link 
+                    href="/auth#signup"
+                    className="inline-flex items-center justify-center px-6 py-3 border border-outline-variant/20 bg-surface-container hover:bg-surface-container-high text-white font-bold rounded-xl transition-all"
+                  >
+                    Create Account
+                  </Link>
+                  <Link 
+                    href="/auth"
+                    className="inline-flex items-center justify-center px-6 py-3 bg-[#6C63FF] hover:bg-[#5a52d4] text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(108,99,255,0.3)]"
+                  >
+                    Sign In
+                  </Link>
           </div>
         </div>
       </nav>
@@ -228,7 +228,7 @@ export default function LandingPage() {
           {/* CTA buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <Link
-              href="/sign-up"
+              href="/auth#signup"
               className="hero-cta group px-8 py-4 rounded-full bg-gradient-to-r from-[#8781FF] to-[#C4C0FF] text-[#0A0A0F] font-bold text-sm inline-flex items-center gap-2 hover:shadow-[0_0_50px_rgba(135,129,255,0.3)] transition-all duration-300 hover:scale-[1.02]"
               style={{ opacity: 0 }}
             >
@@ -398,7 +398,7 @@ export default function LandingPage() {
             Join Sagevu today. Subscribe to the minds that matter most.
           </p>
           <Link
-            href="/sign-up"
+            href="/auth#signup"
             className="group inline-flex items-center gap-2 px-10 py-5 rounded-full bg-white text-[#0A0A0F] font-bold text-base hover:shadow-[0_0_60px_rgba(255,255,255,0.15)] transition-all duration-300 hover:scale-[1.02]"
           >
             Create your account
@@ -416,7 +416,7 @@ export default function LandingPage() {
             © {new Date().getFullYear()} Sagevu. All rights reserved.
           </div>
           <div className="flex items-center gap-6 text-sm text-white/30">
-            <Link href="/sign-up" className="hover:text-white transition-colors">Get started</Link>
+            <Link href="/auth#signup" className="hover:text-white transition-colors">Get started</Link>
             <a href="#features" className="hover:text-white transition-colors">Features</a>
             <a href="#how" className="hover:text-white transition-colors">How it works</a>
           </div>
