@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { SpecialistCard } from '@/components/specialist/SpecialistCard'
 import { Input } from '@/components/ui/input'
 import type { Specialist } from '@/types'
+import { SPECIALTY_CATEGORIES } from '@/lib/specialtyCategories'
 
 type FilterType = 'ALL' | 'AI' | 'HUMAN'
 
@@ -15,15 +16,17 @@ interface DiscoverGridProps {
 export function DiscoverGrid({ specialists, subscriberCounts = {} }: DiscoverGridProps) {
   const [filter, setFilter] = useState<FilterType>('ALL')
   const [search, setSearch] = useState('')
+  const [category, setCategory] = useState<string>('ALL')
 
   const filtered = specialists.filter((s) => {
     const matchesType = filter === 'ALL' || s.type === filter
+    const matchesCategory = category === 'ALL' || s.specialty === category
     const matchesSearch =
       !search ||
       [s.name, s.specialty, s.tagline, s.bio].some((field) =>
         field?.toLowerCase().includes(search.toLowerCase())
       )
-    return matchesType && matchesSearch
+    return matchesType && matchesCategory && matchesSearch
   })
 
   const filters: { value: FilterType; label: string; icon: string }[] = [
@@ -90,12 +93,45 @@ export function DiscoverGrid({ specialists, subscriberCounts = {} }: DiscoverGri
         </div>
       </div>
 
+      {/* Category filter pills */}
+      <div
+        className="flex gap-2 flex-wrap mb-6"
+        role="group"
+        aria-label="Filter by specialty category"
+      >
+        <button
+          onClick={() => setCategory('ALL')}
+          aria-pressed={category === 'ALL'}
+          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors whitespace-nowrap ${
+            category === 'ALL'
+              ? 'bg-primary/20 border-primary text-primary'
+              : 'bg-surface-container border-outline-variant/20 text-outline hover:text-white hover:border-outline-variant/40'
+          }`}
+        >
+          All Categories
+        </button>
+        {SPECIALTY_CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setCategory(cat)}
+            aria-pressed={category === cat}
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors whitespace-nowrap ${
+              category === cat
+                ? 'bg-primary/20 border-primary text-primary'
+                : 'bg-surface-container border-outline-variant/20 text-outline hover:text-white hover:border-outline-variant/40'
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
       {/* Results */}
       {filtered.length === 0 ? (
         <div className="text-center py-24" role="status" aria-live="polite">
           <div className="w-20 h-20 rounded-full bg-surface-container-high flex items-center justify-center mx-auto mb-6">
             <span className="material-symbols-outlined text-outline text-3xl" aria-hidden="true">
-              {search ? 'search_off' : 'explore'}
+              {search ? 'search_off' : category !== 'ALL' ? 'filter_list_off' : 'explore'}
             </span>
           </div>
 
@@ -116,17 +152,21 @@ export function DiscoverGrid({ specialists, subscriberCounts = {} }: DiscoverGri
           ) : (
             <>
               <h3 className="text-white font-bold text-xl mb-2">
-                No results for &ldquo;{search}&rdquo;
+                {search
+                  ? `No results for \u201c${search}\u201d`
+                  : `No specialists in \u201c${category}\u201d`}
               </h3>
               <p className="text-outline mb-6">
-                Try a different search term or clear your search.
+                {search
+                  ? 'Try a different search term or clear your filters.'
+                  : 'Try a different category or browse all specialists.'}
               </p>
               <button
-                onClick={() => { setSearch(''); setFilter('ALL') }}
+                onClick={() => { setSearch(''); setFilter('ALL'); setCategory('ALL') }}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-outline-variant/30 text-on-surface-variant font-bold text-sm hover:border-primary/30 hover:text-white transition-all duration-200"
               >
                 <span className="material-symbols-outlined text-base" aria-hidden="true">close</span>
-                Clear search
+                Clear filters
               </button>
             </>
           )}

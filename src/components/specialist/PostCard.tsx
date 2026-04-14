@@ -1,5 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
+import { MediaCarousel } from '@/components/ui/MediaCarousel'
 import { formatRelativeTime } from '@/lib/utils'
 import type { Post } from '@/types'
 
@@ -22,35 +24,43 @@ export function PostCard({
   const avatar = specialistAvatarUrl ?? post.specialist?.avatarUrl
   const slug = specialistSlug ?? post.specialist?.slug
 
+  // Separate images from video in mediaUrls
+  const images = (post.mediaUrls ?? []).filter((u) => !u.match(/\.mp4(\?|$)/i))
+  const videoUrl = (post.mediaUrls ?? []).find((u) => u.match(/\.mp4(\?|$)/i))
+
   return (
     <article className="group relative bg-surface-container rounded-xl overflow-hidden border border-outline-variant/10 hover:border-outline-variant/30 transition-all duration-300">
-      <div className="p-6 pb-4">
+      <div className="p-5 pb-4">
         {/* Author row */}
         <header className="flex items-center gap-3 mb-4">
-          <div
-            className="w-8 h-8 rounded-full border border-outline-variant/20 bg-surface-container-high overflow-hidden flex-shrink-0"
+          <Link
+            href={slug ? `/${slug}` : '#'}
+            className="flex-shrink-0 w-10 h-10 rounded-full border border-outline-variant/20 bg-surface-container-high overflow-hidden block"
             aria-hidden="true"
+            tabIndex={-1}
           >
             {avatar ? (
               <Image
                 src={avatar}
                 alt=""
-                width={32}
-                height={32}
+                width={40}
+                height={40}
                 className="object-cover w-full h-full"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary-container/20">
-                <span className="text-xs font-black text-primary">{name[0]}</span>
+                <span className="text-sm font-black text-primary">{name[0]}</span>
               </div>
             )}
-          </div>
-          <div className="flex flex-col">
-            <span className="text-white font-bold text-sm">{name}</span>
-            <time
-              dateTime={post.createdAt}
-              className="text-outline text-[10px]"
+          </Link>
+          <div className="flex flex-col min-w-0">
+            <Link
+              href={slug ? `/${slug}` : '#'}
+              className="text-white font-bold text-sm hover:text-primary transition-colors truncate"
             >
+              {name}
+            </Link>
+            <time dateTime={post.createdAt} className="text-outline text-[11px]">
               {formatRelativeTime(new Date(post.createdAt))}
             </time>
           </div>
@@ -58,85 +68,131 @@ export function PostCard({
 
         {/* Content */}
         {isLocked ? (
-          <div className="relative min-h-[80px]">
-            <p
-              className="text-on-surface-variant text-sm blur-sm select-none line-clamp-3"
+          <div className="relative min-h-[100px]">
+            <div
+              className="text-on-surface-variant text-sm blur-sm select-none line-clamp-4 leading-relaxed"
               aria-hidden="true"
             >
               {post.content}
-            </p>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
+            </div>
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
               <div
-                className="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center mb-2"
+                className="w-11 h-11 rounded-full bg-surface-container-highest flex items-center justify-center"
                 aria-hidden="true"
               >
                 <span
-                  className="material-symbols-outlined text-primary text-2xl"
+                  className="material-symbols-outlined text-primary text-xl"
                   style={{ fontVariationSettings: "'FILL' 1" }}
                 >
                   lock
                 </span>
               </div>
               <p className="text-white font-bold text-sm">Subscriber Content</p>
+              {slug && (
+                <Link
+                  href={`/${slug}`}
+                  className="text-primary text-xs font-bold hover:underline"
+                >
+                  Subscribe to unlock
+                </Link>
+              )}
             </div>
           </div>
         ) : (
           <>
-            <p className="text-on-surface-variant text-sm leading-relaxed mb-4">
-              {post.content}
-            </p>
-            {post.mediaUrls?.length > 0 && (
-              <div
-                className={`grid gap-2 mb-4 ${
-                  post.mediaUrls.length === 1 ? 'grid-cols-1' : 'grid-cols-2'
-                }`}
+            {/* Rendered markdown */}
+            <div className="text-on-surface-variant text-sm leading-relaxed mb-1">
+              <ReactMarkdown
+                components={{
+                  h1: ({ children }) => (
+                    <h1 className="text-white text-lg font-black mb-2 mt-3 first:mt-0">{children}</h1>
+                  ),
+                  h2: ({ children }) => (
+                    <h2 className="text-white text-base font-bold mb-2 mt-3 first:mt-0">{children}</h2>
+                  ),
+                  h3: ({ children }) => (
+                    <h3 className="text-white text-sm font-bold mb-1.5 mt-2 first:mt-0">{children}</h3>
+                  ),
+                  strong: ({ children }) => (
+                    <strong className="text-white font-bold">{children}</strong>
+                  ),
+                  em: ({ children }) => (
+                    <em className="text-on-surface-variant italic">{children}</em>
+                  ),
+                  ul: ({ children }) => (
+                    <ul className="my-2 space-y-1.5">{children}</ul>
+                  ),
+                  ol: ({ children }) => (
+                    <ol className="my-2 space-y-1.5">{children}</ol>
+                  ),
+                  li: ({ children, ...props }) => {
+                    const isOrdered = (props as { ordered?: boolean }).ordered
+                    return (
+                      <li className="flex gap-2 text-sm">
+                        <span className="text-primary flex-shrink-0 font-bold leading-5">
+                          {isOrdered ? '→' : '•'}
+                        </span>
+                        <span className="text-on-surface-variant">{children}</span>
+                      </li>
+                    )
+                  },
+                  p: ({ children }) => (
+                    <p className="mb-2 last:mb-0 text-on-surface-variant text-sm leading-relaxed">
+                      {children}
+                    </p>
+                  ),
+                  hr: () => <hr className="border-outline-variant/20 my-3" />,
+                  code: ({ children }) => (
+                    <code className="bg-surface-container-highest text-primary px-1.5 py-0.5 rounded text-xs font-mono">
+                      {children}
+                    </code>
+                  ),
+                  blockquote: ({ children }) => (
+                    <blockquote className="border-l-2 border-primary/40 pl-3 my-2 text-outline italic text-sm">
+                      {children}
+                    </blockquote>
+                  ),
+                }}
               >
-                {post.mediaUrls.map((url, i) => (
-                  <div
-                    key={i}
-                    className="relative rounded-lg overflow-hidden aspect-video bg-surface-container-high"
-                  >
-                    <Image src={url} alt="" fill className="object-cover" />
-                  </div>
-                ))}
-              </div>
+                {post.content}
+              </ReactMarkdown>
+            </div>
+
+            {/* Media */}
+            {(images.length > 0 || videoUrl) && (
+              <MediaCarousel images={images} videoUrl={videoUrl} />
             )}
           </>
         )}
       </div>
 
       {/* Footer */}
-      <footer className="px-6 py-3 bg-surface-container-low border-t border-outline-variant/5 flex items-center gap-4">
+      <footer className="px-5 py-3 bg-surface-container-low border-t border-outline-variant/5 flex items-center gap-4">
         <button
-          className="flex items-center gap-2 text-outline text-sm hover:text-primary transition-colors duration-200"
+          className="flex items-center gap-1.5 text-outline text-sm hover:text-primary transition-colors duration-200"
           aria-label="Like post"
         >
-          <span className="material-symbols-outlined text-base" aria-hidden="true">
+          <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
             favorite
           </span>
         </button>
         <button
-          className="flex items-center gap-2 text-outline text-sm hover:text-on-surface transition-colors duration-200"
+          className="flex items-center gap-1.5 text-outline text-sm hover:text-on-surface transition-colors duration-200"
           aria-label="Comment on post"
         >
-          <span className="material-symbols-outlined text-base" aria-hidden="true">
+          <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
             comment
           </span>
         </button>
-        <div className="ml-auto">
-          {isLocked && slug && (
-            <Link
-              href={`/${slug}`}
-              className="text-primary text-xs font-bold hover:underline flex items-center gap-1"
-              aria-label="Unlock subscriber content"
-            >
-              <span className="material-symbols-outlined text-sm" aria-hidden="true">
-                visibility_off
-              </span>
-              Unlock
-            </Link>
-          )}
-        </div>
+        {slug && (
+          <Link
+            href={`/${slug}`}
+            className="ml-auto flex items-center gap-1 text-outline text-xs hover:text-on-surface transition-colors"
+            aria-label={`View ${name}'s profile`}
+          >
+            <span className="material-symbols-outlined text-sm">open_in_new</span>
+          </Link>
+        )}
       </footer>
     </article>
   )
